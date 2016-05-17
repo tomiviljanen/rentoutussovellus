@@ -6,9 +6,30 @@
 </head>
 <body>
 
+
+<div id="loginscreen">
+
+
+
+<!-- Kirjautuiminen sisään-->
+<form id="log in" method="post" action="login.php">
+
+<label for="email">Sähköposti</label>
+<input type="email" name="email" id="email" placeholder="Esim. matti@gmail.com"/>
+<br>
+<label for="password">Salasana</label>
+<input type="password" name="password" id="password"/>
+<br>
+<input type="submit" value="Laheta">
+<br>
+
+
+
+
+</form>
+<!-- Uuden käyttäjän teko-->
 <form id="create user" method="post" action="createuser.php">
-
-
+<h2>Tee uusi käyttäjä</h2>
 <label for="username">Koko nimi</label>
 <input type="text" name="username" id="username" placeholder="Esim. Matti Matikainen"/>
 <br>
@@ -20,6 +41,7 @@
 <br>
 <input type="Submit" value="Laheta">
 </form>
+<!-- Tilpäinen, mutta katsoo mitä tietokannassa näkyy ilman että tarvitsee mennä itse tietokantaan, poistetaan myöhemmin-->
 <?php
 // vieraskirjasql.php
 
@@ -49,5 +71,6 @@ while($i <= $lkm) {
 
 mysql_close($yhteys);
 ?>
+</div>
 </body>
 </html>
