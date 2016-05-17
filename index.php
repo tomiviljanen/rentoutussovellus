@@ -5,72 +5,54 @@
 <title></title>
 </head>
 <body>
-
-
-<div id="loginscreen">
-
-
-
-<!-- Kirjautuiminen sisään-->
-<form id="log in" method="post" action="login.php">
-
-<label for="email">Sähköposti</label>
-<input type="email" name="email" id="email" placeholder="Esim. matti@gmail.com"/>
-<br>
-<label for="password">Salasana</label>
-<input type="password" name="password" id="password"/>
-<br>
-<input type="submit" value="Laheta">
-<br>
-
-
-
-
-</form>
-<!-- Uuden käyttäjän teko-->
-<form id="create user" method="post" action="createuser.php">
-<h2>Tee uusi käyttäjä</h2>
-<label for="username">Koko nimi</label>
-<input type="text" name="username" id="username" placeholder="Esim. Matti Matikainen"/>
-<br>
-<label for="password">Salasana</label>
-<input type="password" name="password" id="password"/>
-<br>
-<label for="email">Sähköposti</label>
-<input type="email" name="email" id="email" placeholder="Esim. matti@gmail.com"/>
-<br>
-<input type="Submit" value="Laheta">
-</form>
-<!-- Tilpäinen, mutta katsoo mitä tietokannassa näkyy ilman että tarvitsee mennä itse tietokantaan, poistetaan myöhemmin-->
-<?php
-// vieraskirjasql.php
-
-//Yhteys
-$yhteys = mysql_connect('localhost', 'root', 'cnfCa8hb');
-
-//Tietokanta
-mysql_select_db('rentoutussovellus', $yhteys);
-
-//SQL-kysely
-$result = mysql_query('SELECT * FROM users ORDER BY name ASC', $yhteys);
-
-//Rivimäärä
-$lkm = mysql_num_rows($result);
-
-//Tulokset läpi
-$i = 1;
-while($i <= $lkm) {
-	
-	$rivi = mysql_fetch_assoc($result);
-	
-	echo "<p><b>Nimi:</b> " . $rivi['name'] . "<br><b>Suojattu salasana:</b> " . $rivi['pass'] . "<br><b>Sahkoposti:</b> " . $rivi['sahkoposti'];
-	echo "<br><b>Onko admin:</b> " . $rivi['admin'];
-	echo "<br><b>User id:</b> " . $rivi['user_id'];
-	$i++;
+<style>
+body { margin:0; padding:0; }
+div{
+	background-color: #A50E2D;
+	color: #dbdc2b;
+	display: inline-block;
+	min-width: 320px;
+	text-align: center;
 }
 
-mysql_close($yhteys);
-?>
+input[type="submit"]{
+	margin-top: 25px;
+}
+
+</style>
+<div>
+	<!-- Kirjautuiminen sisään-->
+	<form id="log in" method="post" action="login.php">
+		<h2>Kirjaudu sisään</h2>
+		<label for="email">Sähköposti</label><br>
+		<input type="email" name="email" id="email"/>
+
+		<br>
+		<label for="password">Salasana</label><br>
+		<input type="password" name="password" id="password"/>
+		
+		<br>
+		<input type="submit" value="Lähetä">
+	</form>
+</div>
+<div>
+	<!-- Uuden käyttäjän teko-->
+	<form id="create user" method="post" action="createuser.php">
+		<h2>Tee uusi käyttäjä</h2>
+		<label for="username">Koko nimi</label><br>
+		<input type="text" name="username" id="username"/>
+		
+		<br>
+		<label for="password">Salasana</label><br>
+		<input type="password" name="password" id="password"/>
+		
+		<br>
+		<label for="email">Sähköposti</label><br>
+		<input type="email" name="email" id="email"/>
+
+		<br>
+		<input type="Submit" value="Laheta">
+	</form>
 </div>
 </body>
 </html>
