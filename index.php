@@ -11,13 +11,13 @@
 
 <label for="username">Koko nimi</label>
 <input type="text" name="username" id="username" placeholder="Esim. Matti Matikainen"/>
-
+<br>
 <label for="password">Salasana</label>
 <input type="password" name="password" id="password"/>
-
+<br>
 <label for="email">Sähköposti</label>
 <input type="email" name="email" id="email" placeholder="Esim. matti@gmail.com"/>
-
+<br>
 <input type="Submit" value="Laheta">
 </form>
 <?php
@@ -27,10 +27,10 @@
 $yhteys = mysql_connect('localhost', 'root', 'cnfCa8hb');
 
 //Tietokanta
-mysql_select_db('users', $yhteys);
+mysql_select_db('rentoutussovellus', $yhteys);
 
 //SQL-kysely
-$result = mysql_query('SELECT name, pass, sahkoposti, admin, user_id FROM users ORDER BY name ASC', $yhteys);
+$result = mysql_query('SELECT * FROM users ORDER BY name ASC', $yhteys);
 
 //Rivimäärä
 $lkm = mysql_num_rows($result);
@@ -41,8 +41,9 @@ while($i <= $lkm) {
 	
 	$rivi = mysql_fetch_assoc($result);
 	
-	echo "<p>" . $rivi['name'] . " " . $rivi['pass'] . " (" . $rivi['sahkoposti'] . ")";
-	echo "<br>Onko admin " . $rivi['admin'] . ", User id <b>" . $rivi['user_id'] . "€</b>";
+	echo "<p><b>Nimi:</b> " . $rivi['name'] . "<br><b>Suojattu salasana:</b> " . $rivi['pass'] . "<br><b>Sahkoposti:</b> " . $rivi['sahkoposti'];
+	echo "<br><b>Onko admin:</b> " . $rivi['admin'];
+	echo "<br><b>User id:</b> " . $rivi['user_id'];
 	$i++;
 }
 

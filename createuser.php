@@ -11,6 +11,7 @@
 <?php //lisaasql.php
 $username = $_POST['username'];
 $password = $_POST['password'];
+$hashedpass = password_hash($password, PASSWORD_DEFAULT);
 $email = $_POST['email'];
 if (empty($username) || empty ($password) || empty ($email)) { 
 echo "<h3>Alueet eiv&aumlt saa olla tyhjiä</h3>";
@@ -18,12 +19,13 @@ echo "<a href=\"index.php\">Takaisin</a>";} else {
 //Otetaan yhteys tietokantapalvelimeen
 $yhteys = mysql_connect('localhost', 'root', 'cnfCa8hb');
 // Valitaan oikea tietokanta
-mysql_select_db('users', $yhteys);
+mysql_select_db('rentoutussovellus', $yhteys);
 // Tallennetaan uusi viesti tietokantaan SQL-lauseella
-mysql_query("INSERT INTO Auto (username, malli, vuosimalli, ajokilometrit, vari, hinta) VALUES ('$merkki', '$malli', '$vuosimalli', '$ajokilometrit', '$vari', '$hinta')");
+mysql_query("INSERT INTO users (name, pass, sahkoposti, admin) VALUES ('$username', '$hashedpass', '$email', 'false')");
 // Katkaistaan yhteys
 mysql_close($yhteys);
-header("Location: autot.php"); 
+
+header("Location: index.php"); 
 }
 ?>
 
