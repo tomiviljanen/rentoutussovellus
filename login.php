@@ -1,68 +1,65 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Log in</title>
+<title></title>
 </head>
 <body>
 <style>
-
+body { margin:0; padding:0; }
 div{
-background-color: #A50E2D;
-padding: 25px;
-color: #dbdc2b;
-text-align: center;
+	background-color: #A50E2D;
+	color: #dbdc2b;
+	display: block;
+	min-width: 320px;
+	max-width: 480px;
+	text-align: center;
+	margin: 0 auto;
+	padding: 25px 0px 25px 0px;
 }
-a{
-color: #46a5e5;
+
+input[type="submit"]{
+	margin-top: 25px;
 }
 
 </style>
 <div>
-<?php
-//Variables
-$email = $_POST['email'];
-$password = $_POST['password'];
-//if empty give this instead
-if (empty ($password) || empty ($email)) { 
-echo "<h3>Alueet eiv&aumlt saa olla tyhjiä</h3>";
-echo "<a href=\"index.php\">Takaisin</a>";} else {
-//Connect to database server
-$yhteys = mysql_connect('localhost', 'root', 'rootpass');
-//Choose database
-mysql_select_db('rentoutussovellus', $yhteys);
+	<!-- Kirjautuiminen sisään-->
+	<form id="log in" method="post" action="loginverify.php">
+		<h2>Kirjaudu sisään</h2>
+		<label for="email">Sähköposti</label><br>
+		<input type="email" name="email" id="email" required/>
 
-//Get email and password with that matches the email that was inputted
-$result = mysql_query("SELECT sahkoposti, pass FROM users WHERE sahkoposti = '$email'", $yhteys);
+		<br>
+		<label for="password">Salasana</label><br>
+		<input type="password" name="password" id="password" required/>
+		
+		<br>
+		<input type="submit" value="Kirjaudu sisään">
+	</form>
+</div>
+<div>
+	<!-- Uuden käyttäjän teko-->
+	<form id="create user" method="post" action="createuser.php">
+		<h2>Tee uusi käyttäjä</h2>
+		<label for="firstname">Etunimi</label><span>*</span><br>
+		<input type="text" name="firstname" id="firstname" required/>
+		<br />
+		<label for="surname">Sukunimi</label><span>*</span><br>
+		<input type="text" name="surname" id="surname" required/>
+		<br>
+		<label for="password">Salasana</label><span>*</span><br>
+		<input type="password" name="password" id="password" required/>
+		
+		<br>
+		<label for="email">Sähköposti</label><span>*</span><br>
+		<input type="email" name="email" id="email" required/>
+		<br>
+		<span>*-kentät ovat pakollisia</span>
+		<br>
+		<input type="Submit" value="Luo käyttäjä">
 
-//how many results
-$lkm = mysql_num_rows($result);
-
-//Tulokset läpi
-$i = 1;
-if($lkm == 0){
-		echo "Sähköposti ja salasana eivät täsmää";	
-	}else{
-while($i <= $lkm) {
-	
-	$rivi = mysql_fetch_assoc($result);
-	//Check to see if inputted password matches  the one on the database
-	if(password_verify($password, $rivi['pass'])){
-		//Password matches
-		echo "Kirjatuminen sisään onnistui, sinut uudelleenohjataan etusivulle";
-	}else{
-		//Password doesnt match
-		echo "Sähköposti ja salasana eivät täsmää";
-	}
-	$i++;
-	}
-}
-//Back to sign in page link
-echo "<br><a href=\"index.php\">Takaisin</a>";
-//Close connection to database
-mysql_close($yhteys);
-}
-?>
+	</form>
 </div>
 </body>
 </html>
