@@ -1,0 +1,54 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+
+#userinfo{
+float: right;
+}
+
+#icons{
+	font-size: 40px;
+	line-height: 50px;
+	width: 50px;
+    height: 50px;
+}
+#header{
+	background-color: #A50E2D;
+	color: #dbdc2b;
+}
+
+#menubutton{
+	display:inline-block;
+	min-height: 50px;
+	min-width: 50px;
+	text-align: center;
+}
+
+#menubutton:hover{
+	background-color: black;
+	transition: 150ms linear;
+}
+#nav{
+	display: inline-block;
+	font-size: 1.17em;
+	min-height: 50px;
+	height: 50px;
+	line-height: 0.5em;
+	background-color: #A50E2D;
+}
+
+ul li{
+	display: inline;
+		padding-right: 25px;
+}
+
+#username{
+	float: left;
+	line-height: 0.5em;
+	padding: 0px 10px 0px 10px;
+	display:inline-block;
+	margin: 0;
+	max-height: 50px;
+	min-height: 50px;
+}
