@@ -17,7 +17,7 @@ if (empty($username) || empty ($password) || empty ($email)) {
 echo "<h3>Alueet eiv&aumlt saa olla tyhjiä</h3>";
 echo "<a href=\"index.php\">Takaisin</a>";} else {
 //Connect to database
-$yhteys = mysql_connect('localhost', 'root', 'cnfCa8hb');
+$yhteys = mysql_connect('localhost', 'root', 'rootpass');
 //Choose the database
 mysql_select_db('rentoutussovellus', $yhteys);
 //Add user to database
