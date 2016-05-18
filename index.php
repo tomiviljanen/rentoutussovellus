@@ -11,8 +11,19 @@
 <script>
 var audio = new Audio;
 function set(src){ audio.src = src; }
-function play() { audio.play(); }
-function pause() { audio.pause(); }
+function play() { 	audio.play();
+					document.getElementsByClassName('play')[0].style.display='none';
+					document.getElementsByClassName('pause')[0].style.display='initial';
+				}
+function pause() { 	audio.pause(); 
+					document.getElementsByClassName('pause')[0].style.display='none';
+					document.getElementsByClassName('play')[0].style.display='initial';
+				}
+				
+function stop(){audio.pause();
+				audio.currentTime = 0;
+				document.getElementsByClassName('pause')[0].style.display='none';
+				document.getElementsByClassName('play')[0].style.display='initial';}
 
 </script>
 <?php
@@ -33,20 +44,29 @@ if(empty($_SESSION['userid']))
 
 </div>
 <div id="userinfo">
-	<div id="username" class="test">
+	<div id="username">
 		<h3><?php echo ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]) . " "; ?></h3>
 	</div>
-	<div id="menubutton" class="test">
+	<div id="menubutton">
 		<span class="fa fa-angle-down" id="icons" aria-hidden="true"></span>
 	</div>
 </div>
 </div>
 
 
-
 <div id="audioplayer">
-<button onClick="play()">Play</button>
-<button onClick="pause()">Pause</button>
+<div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward"></span></div>
+<div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play"></span></div>
+<div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span class="fa fa-pause"></span></div>
+<div id="media-buttons" class="stop" onClick="stop()"><span class="fa fa-stop"></span></div>
+<div id="media-buttons" class="forward" onClick="forward()"><span class="fa fa-forward"></span></div>
+<?php
+    $xml = simplexml_load_file('aanitteet/aanite.xml');
+ 
+    echo "Nimi:" . $xml->nimi
+
+
+?>
 <button onClick="set('https://incompetech.com/music/royalty-free/mp3-royaltyfree/Thief%20in%20the%20Night.mp3')">Set sound</button>
 
 
