@@ -1,6 +1,10 @@
 <?php
 session_start();
-echo "Hello " . $_SESSION["firstname"] . $_SESSION["surname"]
+if(empty($_SESSION['userid']))
+    {
+    header('Location:login.php');;
+    }else{
+echo "Hello " . ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]);
 
 
 
@@ -8,5 +12,5 @@ echo "Hello " . $_SESSION["firstname"] . $_SESSION["surname"]
 
 
 
-
+}
 ?>

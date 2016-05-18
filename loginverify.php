@@ -55,6 +55,7 @@ while($i <= $lkm) {
 		$_SESSION["firstname"] = $rivi['fname'];
 		$_SESSION["surname"] = $rivi['lname'];
 		$_SESSION["email"] = $rivi['sahkoposti'];
+		session_write_close();
 		header("Location: index.php");
 	}else{
 		//Password doesnt match
