@@ -118,7 +118,7 @@ if(empty($_SESSION['userid']))
 <?php
     $xml = simplexml_load_file('aanitteet/aanite.xml');
  
-    echo "<h3 id=\"songname\">" . $xml->nimi . "</h3>";
+    echo "<h2 id=\"songname\">" . $xml->nimi . "</h2>";
 
 
 ?>
