@@ -63,12 +63,12 @@ function closeVolumeSlider(){
 function muteSound(){
 	audio.muted = true;
 	document.getElementsByClassName('mutebutton')[0].style.display = 'none';
-	document.getElementsByClassName('unmutebutton')[0].style.display = 'table-cell';
+	document.getElementsByClassName('unmutebutton')[0].style.display = 'initial';
 }
 
 function unmuteSound(){
 	audio.muted = false;
-	document.getElementsByClassName('mutebutton')[0].style.display = 'table-cell';
+	document.getElementsByClassName('mutebutton')[0].style.display = 'initial';
 	document.getElementsByClassName('unmutebutton')[0].style.display = 'none';
 }
 
@@ -108,10 +108,10 @@ if(empty($_SESSION['userid']))
 <div id="media-buttons" class="forward" onClick="forward()"><span id="icons" class="fa fa-forward" aria-hidden="true"></span></div>
 <div id="volume">
 <div id="media-buttons" class="openbutton" onclick="openVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true"></span></div>
-<div id="media-buttons" class="closebutton" style="display: none;" onclick="closeVolumeSlider()"><span id="icons" class="fa fa-volume-off" aria-hidden="true" ></span></div>
+<div id="media-buttons" class="closebutton" style="display: none;" onclick="closeVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true" ></span></div>
 	<div id="slidercontainer">
-		<div id="media-buttons" class="mutebutton" onclick="muteSound()"><span id="icons" style="display:table-cell; text-align:center;" class="fa fa-volume-up"></span></div>
-		<div id="media-buttons" class="unmutebutton" onclick="unmuteSound()"><span id="icons" style="display:none; text-align:center; class="fa fa-volume-up"></span></div>
+		<div id="media-buttons" class="mutebutton" style=" text-align:center;" onclick="muteSound()"><span id="icons"  class="fa fa-volume-up"></span></div>
+		<div id="media-buttons" class="unmutebutton" style="display:none; text-align:center;" onclick="unmuteSound()"><span id="icons"  class="fa fa-volume-off"></span></div>
 		<input id="volumeSlider" type="range" min="0" max="100" value="50"></input>
 	</div>
 </div>
