@@ -68,7 +68,6 @@ ul li{
 	margin: 0;
 	text-align: center;
 	color: white;
-	background-color: yellow;
 }
 
 #media-buttons span{
@@ -111,7 +110,7 @@ ul li{
 
 input[type="range"]{
 	position: absolute;
-	top: 110px;
+	top: 120px;
 	left: -65px;
    transform: rotate(270deg);
 }
@@ -123,5 +122,5 @@ input[type="range"]{
    bottom: 50px;
    width: 50px;
    background-color: #A50E2D;
-   height: 210px;
+   height: 230px;
 }
