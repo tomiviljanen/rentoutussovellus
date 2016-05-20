@@ -1,78 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<!-- load Jquery-->
+<script
+	type="text/javascript"
+	src="https://code.jquery.com/jquery-2.2.3.min.js"
+	integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+	crossorigin="anonymous">
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" type="text/css" href="index.css">
+<!-- Load icon font-->
 <link rel="stylesheet" href="font-awesome
 /css/font-awesome.min.css">
-<title></title>
+<title>Rentoutussovellus</title>
 </head>
 <body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script>
-var audio = new Audio;
-audio.src = "aanitteet/testi.mp3"
-function play() { 	audio.play();
-					document.getElementsByClassName('play')[0].style.display='none';
-					document.getElementsByClassName('pause')[0].style.display='initial';
-				}
-function pause() { 	audio.pause(); 
-					document.getElementsByClassName('pause')[0].style.display='none';
-					document.getElementsByClassName('play')[0].style.display='initial';
-				}
-				
-function stop(){audio.pause();
-				audio.currentTime = 0;
-				document.getElementsByClassName('pause')[0].style.display='none';
-				document.getElementsByClassName('play')[0].style.display='initial';}
-
-
-
-window.setInterval(function(){
-	var getcurrentProgress = audio.currentTime;
-	var duration = audio.duration;
-	var currentProgress = getcurrentProgress / duration * 100;
-	var durationMin = Math.floor(duration / 60);
-	var durationSec = Math.floor(duration - durationMin * 60);
-	var progressMin = Math.floor(getcurrentProgress / 60);
-	var progressSec = Math.floor(getcurrentProgress - progressMin * 60);
-	document.getElementById("currentprogress").style.width= currentProgress + "%";
-	document.getElementById("currentProgressText").innerHTML = progressMin + ":" + progressSec;
-	document.getElementById("durationText").innerHTML = durationMin + ":" + durationSec;
-	
-}, 100);
-
-window.setInterval(function(){
-	var volume = document.getElementById("volumeSlider").value / 100;
-	audio.volume = volume;
-	
-}, 100);
-
-function openVolumeSlider(){
-	document.getElementById("slidercontainer").style.display = 'table';
-	document.getElementsByClassName('openbutton')[0].style.display = 'none';
-	document.getElementsByClassName('closebutton')[0].style.display = 'initial';
-}
-
-function closeVolumeSlider(){
-	document.getElementById("slidercontainer").style.display = 'none';
-	document.getElementsByClassName('openbutton')[0].style.display = 'initial';
-	document.getElementsByClassName('closebutton')[0].style.display = 'none';
-}
-
-function muteSound(){
-	audio.muted = true;
-	document.getElementsByClassName('mutebutton')[0].style.display = 'none';
-	document.getElementsByClassName('unmutebutton')[0].style.display = 'initial';
-}
-
-function unmuteSound(){
-	audio.muted = false;
-	document.getElementsByClassName('mutebutton')[0].style.display = 'initial';
-	document.getElementsByClassName('unmutebutton')[0].style.display = 'none';
-}
-
-</script>
 <?php
 //Start session
 session_start();
@@ -81,6 +24,8 @@ if(empty($_SESSION['userid']))
     {
     header('Location:login.php');;
     }else{
+		
+		
 ?>
 <div id="header">
 <div id="nav">
@@ -102,8 +47,9 @@ if(empty($_SESSION['userid']))
 <div id="imagecover">
 <img src="media/imagecovers/testi.jpg" width="100" height="100"></img>
 </div>
-<div id="audioplayer">
+<div id="audiocontainer">
 
+<audio src="aanitteet/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
 <div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
@@ -123,19 +69,138 @@ if(empty($_SESSION['userid']))
  
     echo "<h2 id=\"songname\">" . $xml->nimi . "</h2>";
 ?>
-
+<br class="responsivebreak">
 
 <div id="progressbar" class="progressbar">
-<div id="currentprogress"></div>
+            <canvas id="canvas" height="20" width="500px">
+                canvas not supported
+            </canvas>
 </div>
+
 <div id="progresstext">
-	<span id="currentProgressText">00:00</span>
+	<label for="progressbar" id="currentProgressText">00:00</label>
 	<span>/</span>
 	<span id="durationText">00:00</span>
 </div>
 
 
+<script>
 
+var audioPlayer = document.getElementById('audioSource');
+
+audioPlayer.addEventListener("timeupdate", progressBar, true); 
+
+var can = document.querySelector('canvas');
+canCtx = can.getContext('2d');
+
+$(window).resize(function () {
+  width = $(can).parent().width();
+  can.width = width;
+});
+
+function play() { 	audioPlayer.play();
+					document.getElementsByClassName('play')[0].style.display='none';
+					document.getElementsByClassName('pause')[0].style.display='initial';
+				}
+function pause() { 	audioPlayer.pause();
+					document.getElementsByClassName('pause')[0].style.display='none';
+					document.getElementsByClassName('play')[0].style.display='initial';
+				}
+				
+function stop(){
+				audioPlayer.pause();
+				audioPlayer.currentTime = 0;
+				document.getElementsByClassName('pause')[0].style.display='none';
+				document.getElementsByClassName('play')[0].style.display='initial';}
+
+
+
+function progressBar() { 
+	var audioPlayer = document.getElementById('audioSource'); 
+	//get current time in seconds
+	var elapsedTime = Math.round(audioPlayer.currentTime);
+	var elapsedTimeMin = Math.floor(audioPlayer.currentTime / 60);
+	var elapsedTimeSec = Math.floor(audioPlayer.currentTime - elapsedTimeMin * 60);
+			if (elapsedTimeSec < 10){
+		elapsedTimeSec = "0" + elapsedTimeSec;
+	}
+			if (elapsedTimeMin < 10){
+		elapsedTimeMin = "0" + elapsedTimeMin;
+	}
+	document.getElementById('currentProgressText').innerHTML = elapsedTimeMin + ":" + elapsedTimeSec;
+	var durationMin = Math.floor(audioPlayer.duration / 60);
+	var durationSec = Math.floor(audioPlayer.duration - durationMin * 60);
+	if (durationMin < 10){
+		durationMin = "0" + durationMin;
+	}
+	if (durationSec < 10){
+		durationSec = "0" + durationSec;
+	}
+	document.getElementById('durationText').innerHTML = durationMin + ":" + durationSec;
+	//update the progress bar
+	if (canvas.getContext) {
+		var ctx = canvas.getContext("2d");
+		//clear canvas before painting
+		ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+		ctx.fillStyle = "rgb(255,0,0)";
+		var fWidth = (elapsedTime / audioPlayer.duration) * (canvas.clientWidth);
+		if (fWidth > 0) {
+			ctx.fillRect(0, 0, fWidth, canvas.clientHeight);
+		}
+	}
+}
+
+window.setInterval(function(){
+	var volume = document.getElementById("volumeSlider").value / 100;
+	audioPlayer.volume = volume;
+	
+}, 100);
+
+function openVolumeSlider(){
+	document.getElementById("slidercontainer").style.display = 'table';
+	document.getElementsByClassName('openbutton')[0].style.display = 'none';
+	document.getElementsByClassName('closebutton')[0].style.display = 'initial';
+}
+
+function closeVolumeSlider(){
+	document.getElementById("slidercontainer").style.display = 'none';
+	document.getElementsByClassName('openbutton')[0].style.display = 'initial';
+	document.getElementsByClassName('closebutton')[0].style.display = 'none';
+}
+
+function muteSound(){
+	audioPlayer.muted = true;
+	document.getElementsByClassName('mutebutton')[0].style.display = 'none';
+	document.getElementsByClassName('unmutebutton')[0].style.display = 'initial';
+}
+
+function unmuteSound(){
+	audioPlayer.muted = false;
+	document.getElementsByClassName('mutebutton')[0].style.display = 'initial';
+	document.getElementsByClassName('unmutebutton')[0].style.display = 'none';
+}
+
+
+                //set up mouse click to control position of audio
+                canvas.addEventListener("click", function(e) {
+                    //this might seem redundant, but this these are needed later - make global to remove these
+                    var audioPlayer = document.getElementById('audioSource'); 
+                    var canvas = document.getElementById('canvas');            
+
+                    if (!e) {
+                        e = window.event;
+                    } //get the latest windows event if it isn't set
+                    try {
+                        //calculate the current time based on position of mouse cursor in canvas box
+                        audioPlayer.currentTime = audioPlayer.duration * (e.offsetX / canvas.clientWidth);
+                    }
+                    catch (err) {
+                    // Fail silently but show in F12 developer tools console
+                        if (window.console && console.error("Error:" + err));
+                    }
+                }, true);
+            
+</script>
 
 </div>
 <?php
