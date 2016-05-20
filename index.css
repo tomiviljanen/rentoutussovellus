@@ -53,12 +53,14 @@ ul li{
 	min-height: 50px;
 }
 
-#audioplayer{
+#audiocontainer{
 	background-color: rgba(165, 14, 45, 1);
 	width: 100%;
 	min-height: 50px;
 	position: absolute;
 	bottom: 0;
+	text-align: center;
+
 }
 
 #media-buttons{
@@ -82,26 +84,18 @@ ul li{
 }
 
 .progressbar{
-	width: 40%;
-	min-width: 200px;
 	height: 20px;
-	float: right;
 	margin-top: 15px;
-	margin-right: 20px;
 	background-color: yellow;
+	
 }
 
-#currentprogress{
-	width: 0;
-	height:20px;
-	background-color: green;
-	margin: 0;
-	padding: 0;
+
+.currentprogress{
 }
 #progresstext{
 	line-height: 3em;
 	margin-right: 10px;
-	float: right;
 	display: inline-block;
 }
 #volume{
@@ -124,3 +118,32 @@ input[type="range"]{
    background-color: #A50E2D;
    height: 230px;
 }
+
+#imagecover{
+	display: inline-block;
+	position: absolute;
+	bottom: 50px;
+	border-width: 1px 1px 0px 0px;
+	border-color: #A50E2D;
+	border-style: solid;
+	left: 0;
+	}
+  @media screen and (min-width: 1150px){
+            .responsivebreak { display: none; }
+			.progressbar{margin-right: 20px; 	float: right;}
+			#progresstext{float: right;}
+        }
+		
+	@media screen and (min-width: 550px){
+				.progressbar{width: 500px;}
+		
+	}
+	@media screen and (max-width: 1150px){
+		.progressbar{
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+	@media screen and (max-width: 550px){
+		.progressbar{width: 90%;}
+	}
