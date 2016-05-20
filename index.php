@@ -99,8 +99,11 @@ if(empty($_SESSION['userid']))
 	</div>
 </div>
 </div>
-
+<div id="imagecover">
+<img src="media/imagecovers/testi.jpg" width="100" height="100"></img>
+</div>
 <div id="audioplayer">
+
 <div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
@@ -119,8 +122,6 @@ if(empty($_SESSION['userid']))
     $xml = simplexml_load_file('aanitteet/aanite.xml');
  
     echo "<h2 id=\"songname\">" . $xml->nimi . "</h2>";
-
-
 ?>
 
 

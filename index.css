@@ -59,6 +59,7 @@ ul li{
 	min-height: 50px;
 	position: absolute;
 	bottom: 0;
+
 }
 
 #media-buttons{
@@ -124,3 +125,13 @@ input[type="range"]{
    background-color: #A50E2D;
    height: 230px;
 }
+
+#imagecover{
+	display: inline-block;
+	position: absolute;
+	bottom: 50px;
+	border-width: 1px 1px 0px 0px;
+	border-color: #A50E2D;
+	border-style: solid;
+	left: 0;
+	}
