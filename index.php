@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <!-- Load icon font-->
 <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+
 <title>Rentoutussovellus</title>
 </head>
 <body>
@@ -24,27 +25,28 @@ if(empty($_SESSION['userid']))
     {
 	//Redirect to login page
     header('Location:login.php');;
-    }else{
-		
-		
+    }else{		
 ?>
-<div id="headerdesktop">
-<div id="nav">
-<ul id="navlist">
-	<li>Äänitegalleria</li>
-	<li>Kauppa</li>
-	<li>Info</li>
 
-</div>
-<div id="userinfo">
-	<div id="username">
-		<h3><?php echo ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]) . " "; ?></h3>
+<!-- Työpöyädn navigointi -->
+<div id="headerdesktop">
+	<div id="nav">
+		<ul id="navlist">
+			<li>Äänitegalleria</li>
+			<li>Kauppa</li>
+			<li>Info</li>
 	</div>
-	<div id="menubutton" onClick="userinfoDrop()">
-		<span class="fa fa-angle-down" id="icons" aria-hidden="true"></span>
+	<div id="userinfo">
+		<div id="username">
+			<h3><?php echo ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]) . " "; ?></h3>
+		</div>
+		<div id="menubutton" onClick="userinfoDrop()">
+			<span class="fa fa-angle-down" id="icons" aria-hidden="true"></span>
+		</div>
 	</div>
 </div>
-</div>
+
+<!-- Mobiilin navigointi -->
 <div id="headermobile">
 	<div id="nav">
 		<span class="fa fa-music" aria-hidden="true"></span>
@@ -53,53 +55,62 @@ if(empty($_SESSION['userid']))
 		<span class="fa fa-user" aria-hidden="true"></span>
 	</div>
 </div>
-
 <div id="drop-userinfo" style="display: none;">
-<ul>
-	<li>Oma profiili</li>
-	<a href="logout.php"<li>Kirjaudu ulos</li></a>
+	<ul>
+		<li>Oma profiili</li>
+		<a href="logout.php"<li>Kirjaudu ulos</li></a>
 </div>
 
+<!-- Äänitegalleria -->
+<div id="aanitegalleria">
+</div>
 
+<!-- Käyttäjä profiili -->
+<div id="profiili">
+<h2>Oma Profiili</h2>
 
+<h4>Nimi: <?php echo ucfirst($_SESSION['firstname']) . " " . ucfirst($_SESSION['surname']) ?></h4>
+<h4>Sähköposti: <?php echo $_SESSION['email'] ?></h4>
 
+<h3>Vaihda tietoja</h3>
+<div id="userform">
+	<form method="post">
+		<h4>Nimen vaihto</h4>
+		<label for="firstname">Etunimi:</label>
+		<input id="firstname" name="firstname" type="text"/>
+		<br>
+		<label for="surname">Sukunimi:</label>
+		<input id="surname" name="surname" type="text"/>
+		<br>
+		<input type="submit" value="Vaihda nimi">
+	</form>
+</div>
+<div id="userform">
+	<form method="post">
+		<h4>Sähköpostin vaihto</h4>
+		<label for="email">Sähköposti:</label>
+		<input id="email" name="email" type="email"/>
+		<br>
+		<input type="submit" value="Vaihda sähköposti">
+	</form>
+</div>
+<div id="userform">
+	<form method="post">
+		<h4>Salasanan vaihto</h4>
+		<label for="password">Nykyinen salasana:</label>
+		<input id="password" name="currentpassword" type="password"/>
+		<br>
+		<label for="newpass">Uusi salasana:</label>
+		<input id="newpass" name="newpass" type="password"/>
+		<br>
+		<label for="verifypass">Varmista uusi salasana:</label>
+		<input id="verifypass" name="verifypass" type="password"/>
+		<br>
+		<input type="submit" value="Vaihda salasana">
+	</form>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
 
 
 
@@ -125,7 +136,7 @@ if(empty($_SESSION['userid']))
 <div id="imagecover">
 <img src="media/imagecovers/testi.jpg" width="75" height="75"></img>
 </div>
-<audio src="aanitteet/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
+<audio src="aanitteet/mp3/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
 <div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
@@ -140,7 +151,7 @@ if(empty($_SESSION['userid']))
 	</div>
 </div>
 <?php
-    $xml = simplexml_load_file('aanitteet/aanite.xml');
+    $xml = simplexml_load_file('aanitteet/aanite1.xml');
  
     echo "<h2 id=\"songname\">" . $xml->nimi . "</h2>";
 ?>
@@ -160,7 +171,6 @@ if(empty($_SESSION['userid']))
 
 
 <script>
-
 var audioPlayer = document.getElementById('audioSource');
 
 audioPlayer.addEventListener("timeupdate", progressBar, true); 
