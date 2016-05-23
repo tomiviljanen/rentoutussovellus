@@ -9,27 +9,28 @@
 	crossorigin="anonymous">
 </script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<!-- Load Stylesheet for the rest -->
 <link rel="stylesheet" type="text/css" href="index.css">
 <!-- Load icon font-->
-<link rel="stylesheet" href="font-awesome
-/css/font-awesome.min.css">
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 <title>Rentoutussovellus</title>
 </head>
 <body>
 <?php
 //Start session
 session_start();
-//If there is no userid(meanning no login info) redirect back to login page
+//If there is no userid(meaning no login info) redirect back to login page
 if(empty($_SESSION['userid']))
     {
+	//Redirect to login page
     header('Location:login.php');;
     }else{
 		
 		
 ?>
-<div id="header">
+<div id="headerdesktop">
 <div id="nav">
-<ul>
+<ul id="navlist">
 	<li>Äänitegalleria</li>
 	<li>Kauppa</li>
 	<li>Info</li>
@@ -39,25 +40,99 @@ if(empty($_SESSION['userid']))
 	<div id="username">
 		<h3><?php echo ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]) . " "; ?></h3>
 	</div>
-	<div id="menubutton">
+	<div id="menubutton" onClick="userinfoDrop()">
 		<span class="fa fa-angle-down" id="icons" aria-hidden="true"></span>
 	</div>
 </div>
 </div>
-<div id="imagecover">
-<img src="media/imagecovers/testi.jpg" width="100" height="100"></img>
+<div id="headermobile">
+	<div id="nav">
+		<span class="fa fa-music" aria-hidden="true"></span>
+		<span class="fa fa-shopping-cart" aria-hidden="true"></span>
+		<span class="fa fa-info-circle" aria-hidden="true"></span>
+		<span class="fa fa-user" aria-hidden="true"></span>
+	</div>
 </div>
-<div id="audiocontainer">
 
+<div id="drop-userinfo" style="display: none;">
+<ul>
+	<li>Oma profiili</li>
+	<a href="logout.php"<li>Kirjaudu ulos</li></a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="audiocontainer">
+<div id="imagecover">
+<img src="media/imagecovers/testi.jpg" width="75" height="75"></img>
+</div>
 <audio src="aanitteet/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
 <div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
-<div id="media-buttons" class="stop" onClick="stop()"><span id="icons" class="fa fa-stop" aria-hidden="true"></span></div>
 <div id="media-buttons" class="forward" onClick="forward()"><span id="icons" class="fa fa-forward" aria-hidden="true"></span></div>
-<div id="volume">
 <div id="media-buttons" class="openbutton" onclick="openVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true"></span></div>
 <div id="media-buttons" class="closebutton" style="display: none;" onclick="closeVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true" ></span></div>
+<div id="volume">
 	<div id="slidercontainer">
 		<div id="media-buttons" class="mutebutton" style=" text-align:center;" onclick="muteSound()"><span id="icons"  class="fa fa-volume-up"></span></div>
 		<div id="media-buttons" class="unmutebutton" style="display:none; text-align:center;" onclick="unmuteSound()"><span id="icons"  class="fa fa-volume-off"></span></div>
@@ -106,12 +181,6 @@ function pause() { 	audioPlayer.pause();
 					document.getElementsByClassName('pause')[0].style.display='none';
 					document.getElementsByClassName('play')[0].style.display='initial';
 				}
-				
-function stop(){
-				audioPlayer.pause();
-				audioPlayer.currentTime = 0;
-				document.getElementsByClassName('pause')[0].style.display='none';
-				document.getElementsByClassName('play')[0].style.display='initial';}
 
 
 
@@ -155,6 +224,15 @@ window.setInterval(function(){
 	audioPlayer.volume = volume;
 	
 }, 100);
+
+function userinfoDrop(){
+	
+	if(document.getElementById("drop-userinfo").style.display == 'none'){
+	document.getElementById("drop-userinfo").style.display = 'initial';
+	}else{
+			document.getElementById("drop-userinfo").style.display = 'none';
+	}
+	}
 
 function openVolumeSlider(){
 	document.getElementById("slidercontainer").style.display = 'table';
@@ -201,7 +279,6 @@ function unmuteSound(){
                 }, true);
             
 </script>
-
 </div>
 <?php
 }
