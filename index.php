@@ -34,7 +34,7 @@ if(empty($_SESSION['userid']))
 		<ul id="navlist">
 			<li>Äänitegalleria</li>
 			<li>Kauppa</li>
-			<li>Info</li>
+			<li onclick="openInfo()">Info</li>
 	</div>
 	<div id="userinfo">
 		<div id="username">
@@ -50,8 +50,8 @@ if(empty($_SESSION['userid']))
 <div id="headermobile">
 	<div id="nav">
 		<span class="fa fa-music" aria-hidden="true"></span>
-		<span class="fa fa-shopping-cart" aria-hidden="true"></span>
-		<span class="fa fa-info-circle" aria-hidden="true"></span>
+		<a href="https://loistotahti.fi/shop/"><span class="fa fa-shopping-cart" aria-hidden="true"></span></a>
+		<span onclick="openInfo()" class="fa fa-info-circle" aria-hidden="true"></span>
 		<span onclick="openProfile()" class="fa fa-user" aria-hidden="true"></span>
 	</div>
 </div>
@@ -76,35 +76,35 @@ if(empty($_SESSION['userid']))
 <div id="userform">
 	<form method="post" action="changemail.php">
 		<h4>Sähköpostin vaihto</h4>
-		<table >
+		<table>
 		<tr>
 		<th><label for="newmail">Uusi sähköposti:</label></th>
-		<td align="right"><input id="newmail" name="newmail" type="email"/></td>
+		<td><input id="newmail" name="newmail" type="email"/></td>
 		</tr>
 		<tr>
 		<th><label for="verifymail">Vahvista uusi sähköposti:</label></th>
-		<td align="center"><input id="verifymail" name="verifymail" type="email" oninput="checkMail(this)"/></td>
+		<td><input id="verifymail" name="verifymail" type="email" oninput="checkMail(this)"/></td>
 		</tr>
 		<tr>
 		<td colspan="2"	><input type="submit" value="Vaihda sähköposti"></td>
 		</table>
 	</form>
 </div>
-<div id="userform" style="margin-bottom: 150px; text-align: center;">
+<div id="userform" class="bottomform">
 	<form method="post" action="changepass.php">
 		<h4>Salasanan vaihto</h4>
-		<table >
+		<table>
 		<tr>
 		<th><label for="oldpass">Nykyinen salasana:</label></th>
-		<td align="right"><input id="oldpass" name="oldpass" type="password" required/></td>
+		<td><input id="oldpass" name="oldpass" type="password" required/></td>
 		</tr>
 		<tr>
 		<th><label for="newpass">Uusi salasana:</label></th>
-		<td align="right"><input id="newpass" name="newpass" type="password" required/></td>
+		<td><input id="newpass" name="newpass" type="password" required/></td>
 		</tr>
 		<tr>
 		<th><label for="verifypass">Vahvista uusi salasana:</label></th>
-		<td align="right"><input id="verifypass" name="verifypass" type="password" required oninput="check(this)" /></td>
+		<td><input id="verifypass" name="verifypass" type="password" required oninput="check(this)" /></td>
 		</tr>
 		<tr>
 		<td colspan="2"	><input type="submit" value="Vaihda salasana"></td>
@@ -115,6 +115,7 @@ if(empty($_SESSION['userid']))
 //opens my profile
 function openProfile(){
 	document.getElementById('profiili').style.display = 'initial';
+	document.getElementById('infopanel').style.display = 'none';
 }
 
     function check(input) {
@@ -136,26 +137,33 @@ function openProfile(){
 </script>
 </div>
 
+<div id="infopanel">
+<h3>Ohjeet sovelluksen käyttöä varten</h3>
+<button class="accordion">Navigointi</button>
+<div class="panel"><p>Sovelluksen yläpalkista pystyy navigoimaan eri osiin sovelluksessa. Leveällä näytöllä navigointi näyttää tekstiltä ja kapealla näytöllä navigointi näyttää kuvakkeilta.</p></div>
+<button class="accordion">Äänitesoitin</button>
+<div class="panel"><p>Äänite soitin on alapalkissa sijaitseva audiosoitin. Äänite soittimella pystyt toistamaan omistettusi äänitteet, joita voit käydä ostamassa kaupasta. Äänite soittimella ohjaimilla pystyt pysäyttämään äänen toiston, jatkaa seuraavaan tai edelliseen äänitteeseen, vaihtaa äänenvoimakkuuttta ja hypätä eri osiin äänitteissä</p></div>
+<button class="accordion">Kauppa</button>
+<div class="panel"><p>Kaupasta voit ostaa äänitteitä, jotka sitten ilmestyvät äänitegalleriaan. Kaupasta saa hankittua maksullisia ja ilmaisia äänitteitä, joita voi sitten soittaa tässä sovelluksessa.</p></div>
+<button class="accordion">Äänitegalleria</button>
+<div style="margin-bottom: 150px;" class="panel"><p>Äänitegalleriassa näet kaikki omistettusi äänitteet. Äänitegalleriassa pystyt valitsemaan äänitteen soitettavaksi. Voit suodattaa, etsiä tai järjestellä äänitegalleriassa äänitteen nimen, pituuden ja kategorian perusteella</p></div>
+</div>
+<script>
+function openInfo(){
+	document.getElementById('infopanel').style.display = 'initial';
+	document.getElementById('profiili').style.display = 'none';
+}
 
+var acc = document.getElementsByClassName("accordion");
+var i;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function(){
+        this.classList.toggle("active");
+        this.nextElementSibling.classList.toggle("show");
+  }
+}
+</script>
 <div id="audiocontainer">
 <div id="imagecover">
 <img src="media/imagecovers/testi.jpg" width="75" height="75"></img>
