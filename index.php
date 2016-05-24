@@ -52,12 +52,12 @@ if(empty($_SESSION['userid']))
 		<span class="fa fa-music" aria-hidden="true"></span>
 		<span class="fa fa-shopping-cart" aria-hidden="true"></span>
 		<span class="fa fa-info-circle" aria-hidden="true"></span>
-		<span class="fa fa-user" aria-hidden="true"></span>
+		<span onclick="openProfile()" class="fa fa-user" aria-hidden="true"></span>
 	</div>
 </div>
-<div id="drop-userinfo" style="display: none;">
+<div id="drop-userinfo">
 	<ul>
-		<li>Oma profiili</li>
+		<li onClick="openProfile()">Oma profiili</li>
 		<a href="logout.php"<li>Kirjaudu ulos</li></a>
 </div>
 
@@ -74,42 +74,66 @@ if(empty($_SESSION['userid']))
 
 <h3>Vaihda tietoja</h3>
 <div id="userform">
-	<form method="post">
-		<h4>Nimen vaihto</h4>
-		<label for="firstname">Etunimi:</label>
-		<input id="firstname" name="firstname" type="text"/>
-		<br>
-		<label for="surname">Sukunimi:</label>
-		<input id="surname" name="surname" type="text"/>
-		<br>
-		<input type="submit" value="Vaihda nimi">
-	</form>
-</div>
-<div id="userform">
-	<form method="post">
+	<form method="post" action="changemail.php">
 		<h4>Sähköpostin vaihto</h4>
-		<label for="email">Sähköposti:</label>
-		<input id="email" name="email" type="email"/>
-		<br>
-		<input type="submit" value="Vaihda sähköposti">
+		<table >
+		<tr>
+		<th><label for="newmail">Uusi sähköposti:</label></th>
+		<td align="right"><input id="newmail" name="newmail" type="email"/></td>
+		</tr>
+		<tr>
+		<th><label for="verifymail">Vahvista uusi sähköposti:</label></th>
+		<td align="center"><input id="verifymail" name="verifymail" type="email" oninput="checkMail(this)"/></td>
+		</tr>
+		<tr>
+		<td colspan="2"	><input type="submit" value="Vaihda sähköposti"></td>
+		</table>
 	</form>
 </div>
-<div id="userform">
-	<form method="post">
+<div id="userform" style="margin-bottom: 150px; text-align: center;">
+	<form method="post" action="changepass.php">
 		<h4>Salasanan vaihto</h4>
-		<label for="password">Nykyinen salasana:</label>
-		<input id="password" name="currentpassword" type="password"/>
-		<br>
-		<label for="newpass">Uusi salasana:</label>
-		<input id="newpass" name="newpass" type="password"/>
-		<br>
-		<label for="verifypass">Varmista uusi salasana:</label>
-		<input id="verifypass" name="verifypass" type="password"/>
-		<br>
-		<input type="submit" value="Vaihda salasana">
+		<table >
+		<tr>
+		<th><label for="oldpass">Nykyinen salasana:</label></th>
+		<td align="right"><input id="oldpass" name="oldpass" type="password" required/></td>
+		</tr>
+		<tr>
+		<th><label for="newpass">Uusi salasana:</label></th>
+		<td align="right"><input id="newpass" name="newpass" type="password" required/></td>
+		</tr>
+		<tr>
+		<th><label for="verifypass">Vahvista uusi salasana:</label></th>
+		<td align="right"><input id="verifypass" name="verifypass" type="password" required oninput="check(this)" /></td>
+		</tr>
+		<tr>
+		<td colspan="2"	><input type="submit" value="Vaihda salasana"></td>
+		</table>
 	</form>
 </div>
+<script>
+//opens my profile
+function openProfile(){
+	document.getElementById('profiili').style.display = 'initial';
+}
 
+    function check(input) {
+        if (input.value != document.getElementById('newpass').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+    function checkMail(input) {
+        if (input.value != document.getElementById('newmail').value) {
+            input.setCustomValidity('Email Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+</script>
 </div>
 
 
