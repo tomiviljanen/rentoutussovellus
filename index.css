@@ -1,6 +1,8 @@
 body{
 	margin: 0;
 	padding: 0;
+	min-width: 320;
+	min-height: 480;
 }
 
 #userinfo{
@@ -76,7 +78,7 @@ float: right;
 	background-color: rgba(165, 14, 45, 1);
 	width: 100%;
 	min-height: 50px;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	text-align: center;
 
@@ -138,7 +140,25 @@ input[type="range"]{
 	display: inline-block;
 	float:left;
 	}
-  @media screen and (min-width: 1150px){
+	
+#userform{
+	display: inline-block;
+	position:relative;
+	text-align: center;
+	
+}
+#drop-userinfo{display: none;}
+
+#profiili{
+	text-align: center;
+	display:none;
+}
+
+#userform table th{
+	text-align: right;
+}
+
+@media screen and (min-width: 1150px){
             .responsivebreak { display: none; }
 			.progressbar{margin-right: 20px; 	float: right; 	margin-top: 28px;}
 			#progresstext{float: right; 	line-height: 75px;}
@@ -176,5 +196,5 @@ input[type="range"]{
 			display: none;
 			
 		}
-		drop-userinfo{display: none;}
+		#drop-userinfo{display: none;}
 	}

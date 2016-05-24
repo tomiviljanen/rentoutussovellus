@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <!-- Load icon font-->
 <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+
 <title>Rentoutussovellus</title>
 </head>
 <body>
@@ -24,82 +25,116 @@ if(empty($_SESSION['userid']))
     {
 	//Redirect to login page
     header('Location:login.php');;
-    }else{
-		
-		
+    }else{		
 ?>
-<div id="headerdesktop">
-<div id="nav">
-<ul id="navlist">
-	<li>Äänitegalleria</li>
-	<li>Kauppa</li>
-	<li>Info</li>
 
-</div>
-<div id="userinfo">
-	<div id="username">
-		<h3><?php echo ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]) . " "; ?></h3>
+<!-- Työpöyädn navigointi -->
+<div id="headerdesktop">
+	<div id="nav">
+		<ul id="navlist">
+			<li>Äänitegalleria</li>
+			<li>Kauppa</li>
+			<li>Info</li>
 	</div>
-	<div id="menubutton" onClick="userinfoDrop()">
-		<span class="fa fa-angle-down" id="icons" aria-hidden="true"></span>
+	<div id="userinfo">
+		<div id="username">
+			<h3><?php echo ucfirst($_SESSION["firstname"]) . " " . ucfirst($_SESSION["surname"]) . " "; ?></h3>
+		</div>
+		<div id="menubutton" onClick="userinfoDrop()">
+			<span class="fa fa-angle-down" id="icons" aria-hidden="true"></span>
+		</div>
 	</div>
 </div>
-</div>
+
+<!-- Mobiilin navigointi -->
 <div id="headermobile">
 	<div id="nav">
 		<span class="fa fa-music" aria-hidden="true"></span>
 		<span class="fa fa-shopping-cart" aria-hidden="true"></span>
 		<span class="fa fa-info-circle" aria-hidden="true"></span>
-		<span class="fa fa-user" aria-hidden="true"></span>
+		<span onclick="openProfile()" class="fa fa-user" aria-hidden="true"></span>
 	</div>
 </div>
-
-<div id="drop-userinfo" style="display: none;">
-<ul>
-	<li>Oma profiili</li>
-	<a href="logout.php"<li>Kirjaudu ulos</li></a>
+<div id="drop-userinfo">
+	<ul>
+		<li onClick="openProfile()">Oma profiili</li>
+		<a href="logout.php"<li>Kirjaudu ulos</li></a>
 </div>
 
+<!-- Äänitegalleria -->
+<div id="aanitegalleria">
+</div>
 
+<!-- Käyttäjä profiili -->
+<div id="profiili">
+<h2>Oma Profiili</h2>
 
+<h4>Nimi: <?php echo ucfirst($_SESSION['firstname']) . " " . ucfirst($_SESSION['surname']) ?></h4>
+<h4>Sähköposti: <?php echo $_SESSION['email'] ?></h4>
 
+<h3>Vaihda tietoja</h3>
+<div id="userform">
+	<form method="post" action="changemail.php">
+		<h4>Sähköpostin vaihto</h4>
+		<table >
+		<tr>
+		<th><label for="newmail">Uusi sähköposti:</label></th>
+		<td align="right"><input id="newmail" name="newmail" type="email"/></td>
+		</tr>
+		<tr>
+		<th><label for="verifymail">Vahvista uusi sähköposti:</label></th>
+		<td align="center"><input id="verifymail" name="verifymail" type="email" oninput="checkMail(this)"/></td>
+		</tr>
+		<tr>
+		<td colspan="2"	><input type="submit" value="Vaihda sähköposti"></td>
+		</table>
+	</form>
+</div>
+<div id="userform" style="margin-bottom: 150px; text-align: center;">
+	<form method="post" action="changepass.php">
+		<h4>Salasanan vaihto</h4>
+		<table >
+		<tr>
+		<th><label for="oldpass">Nykyinen salasana:</label></th>
+		<td align="right"><input id="oldpass" name="oldpass" type="password" required/></td>
+		</tr>
+		<tr>
+		<th><label for="newpass">Uusi salasana:</label></th>
+		<td align="right"><input id="newpass" name="newpass" type="password" required/></td>
+		</tr>
+		<tr>
+		<th><label for="verifypass">Vahvista uusi salasana:</label></th>
+		<td align="right"><input id="verifypass" name="verifypass" type="password" required oninput="check(this)" /></td>
+		</tr>
+		<tr>
+		<td colspan="2"	><input type="submit" value="Vaihda salasana"></td>
+		</table>
+	</form>
+</div>
+<script>
+//opens my profile
+function openProfile(){
+	document.getElementById('profiili').style.display = 'initial';
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    function check(input) {
+        if (input.value != document.getElementById('newpass').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+    function checkMail(input) {
+        if (input.value != document.getElementById('newmail').value) {
+            input.setCustomValidity('Email Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+</script>
+</div>
 
 
 
@@ -125,7 +160,7 @@ if(empty($_SESSION['userid']))
 <div id="imagecover">
 <img src="media/imagecovers/testi.jpg" width="75" height="75"></img>
 </div>
-<audio src="aanitteet/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
+<audio src="aanitteet/mp3/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
 <div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
@@ -140,7 +175,7 @@ if(empty($_SESSION['userid']))
 	</div>
 </div>
 <?php
-    $xml = simplexml_load_file('aanitteet/aanite.xml');
+    $xml = simplexml_load_file('aanitteet/aanite1.xml');
  
     echo "<h2 id=\"songname\">" . $xml->nimi . "</h2>";
 ?>
@@ -160,7 +195,6 @@ if(empty($_SESSION['userid']))
 
 
 <script>
-
 var audioPlayer = document.getElementById('audioSource');
 
 audioPlayer.addEventListener("timeupdate", progressBar, true); 
