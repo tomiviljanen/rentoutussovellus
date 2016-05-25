@@ -8,6 +8,9 @@
 	integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
 	crossorigin="anonymous">
 </script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/dt/dt-1.10.12/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/u/dt/dt-1.10.12/datatables.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <!-- Load Stylesheet for the rest -->
 <link rel="stylesheet" type="text/css" href="index.css">
@@ -32,7 +35,7 @@ if(empty($_SESSION['userid']))
 <div id="headerdesktop">
 	<div id="nav">
 		<ul id="navlist">
-			<li>Äänitegalleria</li>
+			<li onclick="openGallery()">Äänitegalleria</li>
 			<li>Kauppa</li>
 			<li onclick="openInfo()">Info</li>
 	</div>
@@ -49,7 +52,7 @@ if(empty($_SESSION['userid']))
 <!-- Mobiilin navigointi -->
 <div id="headermobile">
 	<div id="nav">
-		<span class="fa fa-music" aria-hidden="true"></span>
+		<span onclick="openGallery()" class="fa fa-music" aria-hidden="true"></span>
 		<a href="https://loistotahti.fi/shop/"><span class="fa fa-shopping-cart" aria-hidden="true"></span></a>
 		<span onclick="openInfo()" class="fa fa-info-circle" aria-hidden="true"></span>
 		<span onclick="openProfile()" class="fa fa-user" aria-hidden="true"></span>
@@ -59,10 +62,6 @@ if(empty($_SESSION['userid']))
 	<ul>
 		<li onClick="openProfile()">Oma profiili</li>
 		<a href="logout.php"<li>Kirjaudu ulos</li></a>
-</div>
-
-<!-- Äänitegalleria -->
-<div id="aanitegalleria">
 </div>
 
 <!-- Käyttäjä profiili -->
@@ -116,6 +115,7 @@ if(empty($_SESSION['userid']))
 function openProfile(){
 	document.getElementById('profiili').style.display = 'initial';
 	document.getElementById('infopanel').style.display = 'none';
+		document.getElementById('aanitegalleria').style.display = 'none';
 }
 
     function check(input) {
@@ -152,6 +152,7 @@ function openProfile(){
 function openInfo(){
 	document.getElementById('infopanel').style.display = 'initial';
 	document.getElementById('profiili').style.display = 'none';
+	document.getElementById('aanitegalleria').style.display = 'none';
 }
 
 var acc = document.getElementsByClassName("accordion");
@@ -164,11 +165,82 @@ for (i = 0; i < acc.length; i++) {
   }
 }
 </script>
+
+
+<div id="aanitegalleria">
+	<table id="aanitetable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Äänite</th>
+                <th>Kategoria</th>
+                <th>Pituus</th>
+            </tr>
+        </thead>
+		<tbody style="text-align: center;">
+<?php 
+//Connect to database server
+$yhteys = mysql_connect('localhost', 'root', 'rootpass');
+//Choose database
+mysql_select_db('rentoutussovellus', $yhteys);
+
+//Get email and password with that matches the email that was inputted
+$result = mysql_query("SELECT aanitteet.nimi, aanitteet.kategoria, aanitteet.kesto, aanitteet.filename FROM users, omistetut_aanitteet, aanitteet WHERE users.user_id = omistetut_aanitteet.user_id AND omistetut_aanitteet.aanite_id = aanitteet.aanite_id", $yhteys);
+
+//how many results
+$lkm = mysql_num_rows($result);
+
+//Tulokset läpi
+$i = 1;
+
+
+while($i <= $lkm) {
+
+
+		
+	$rivi = mysql_fetch_array($result);
+	
+	$arrayfilename[$i] = $rivi['filename'];
+	
+	echo "<tr onclick=\"updateSource('" . $arrayfilename[$i] . "', '" . $rivi['nimi'] . "') \">";
+	echo "<td>" . $rivi['nimi'] . "</td>";
+	echo "<td>". $rivi['kategoria'] . "</td>";
+	echo "<td>" . gmdate("i:s" ,$rivi['kesto']) . "</td>";
+	echo "</tr>";
+	
+	
+	
+	$i++;
+	}
+?>
+		</tbody>		
+	</table>
+	<script>
+$(document).ready(function() {
+    $('#aanitetable').DataTable( {
+	      "paging":   false,
+        "info":     false
+} );
+} );
+
+</script>
+
+<script>
+
+function openGallery(){
+	
+	document.getElementById('infopanel').style.display = 'none';
+	document.getElementById('aanitegalleria').style.display = 'initial';
+	document.getElementById('profiili').style.display = 'none';
+	
+}
+</script>
+</div>
+
 <div id="audiocontainer">
 <div id="imagecover">
 <img src="media/imagecovers/testi.jpg" width="75" height="75"></img>
 </div>
-<audio src="aanitteet/mp3/testi.mp3" id="audioSource">Audio tag not supported on your browser</audio>
+<audio id="audioSource">Audio tag not supported on your browser</audio>
 <div id="media-buttons" class="backward" onClick="backward()"><span class="fa fa-backward" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
@@ -182,11 +254,9 @@ for (i = 0; i < acc.length; i++) {
 		<input id="volumeSlider" type="range" min="0" max="100" value="50"></input>
 	</div>
 </div>
-<?php
-    $xml = simplexml_load_file('aanitteet/aanite1.xml');
- 
-    echo "<h2 id=\"songname\">" . $xml->nimi . "</h2>";
-?>
+
+
+<h2 id="songname">Valitse äänite galleriasta</h2>
 <br class="responsivebreak">
 
 <div id="progressbar" class="progressbar">
@@ -203,6 +273,17 @@ for (i = 0; i < acc.length; i++) {
 
 
 <script>
+
+		
+Array.prototype.indexOf = function(elem) {
+    for (var i = 0; i < this.length; i++){
+        if (this[i].id === elem)
+            return i;
+    }
+    return -1;
+}
+
+
 var audioPlayer = document.getElementById('audioSource');
 
 audioPlayer.addEventListener("timeupdate", progressBar, true); 
@@ -210,22 +291,63 @@ audioPlayer.addEventListener("timeupdate", progressBar, true);
 var can = document.querySelector('canvas');
 canCtx = can.getContext('2d');
 
+  width = $(can).parent().width();
+  can.width = width;
+
 $(window).resize(function () {
   width = $(can).parent().width();
   can.width = width;
 });
 
-function play() { 	audioPlayer.play();
+
+
+
+var fileArray = <?php echo json_encode($arrayfilename); ?>;
+
+
+var currentSong;
+
+function play() { 	
+				if(!audioPlayer.src){
+					
+				}else{
+					audioPlayer.play();
 					document.getElementsByClassName('play')[0].style.display='none';
 					document.getElementsByClassName('pause')[0].style.display='initial';
+				}
 				}
 function pause() { 	audioPlayer.pause();
 					document.getElementsByClassName('pause')[0].style.display='none';
 					document.getElementsByClassName('play')[0].style.display='initial';
 				}
 
+				
+				
+			
 
+ function updateSource(input, songname) { 
+        var source = "aanitteet/mp3/" + input + ".mp3";
 
+		
+		audioPlayer.src = source;
+		document.getElementById('songname').innerHTML = songname;
+        audioPlayer.load(); //call this to just preload the audio without playing
+        audioPlayer.play(); //call this to play the song right away
+		document.getElementsByClassName('play')[0].style.display='none';
+		document.getElementsByClassName('pause')[0].style.display='initial';
+    }
+
+	function forward(){
+	
+	var fwdSource = "aanitteet/mp3/" + fileArray[currentSong] + ".mp3";
+	
+	alert(fwdSource);
+	
+}	
+	
+
+	
+	
 function progressBar() { 
 	var audioPlayer = document.getElementById('audioSource'); 
 	//get current time in seconds
@@ -238,6 +360,10 @@ function progressBar() {
 			if (elapsedTimeMin < 10){
 		elapsedTimeMin = "0" + elapsedTimeMin;
 	}
+	
+	
+
+	
 	document.getElementById('currentProgressText').innerHTML = elapsedTimeMin + ":" + elapsedTimeSec;
 	var durationMin = Math.floor(audioPlayer.duration / 60);
 	var durationSec = Math.floor(audioPlayer.duration - durationMin * 60);

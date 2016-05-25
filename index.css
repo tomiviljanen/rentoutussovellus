@@ -211,6 +211,16 @@ div.panel.show {
     opacity: 1;
     max-height: 500px;  
 }
+
+
+
+#aanitegalleria{
+	display: none;
+}
+
+#aanitetable{
+	cursor: pointer;
+}
 @media screen and (min-width: 1150px){
             .responsivebreak { display: none; }
 			.progressbar{margin-right: 20px; 	float: right; 	margin-top: 28px;}
