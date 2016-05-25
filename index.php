@@ -8,6 +8,9 @@
 	integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
 	crossorigin="anonymous">
 </script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/dt/dt-1.10.12/datatables.min.css"/>
+ 
+<script type="text/javascript" src="https://cdn.datatables.net/u/dt/dt-1.10.12/datatables.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <!-- Load Stylesheet for the rest -->
 <link rel="stylesheet" type="text/css" href="index.css">
@@ -49,7 +52,7 @@ if(empty($_SESSION['userid']))
 <!-- Mobiilin navigointi -->
 <div id="headermobile">
 	<div id="nav">
-		<span class="fa fa-music" aria-hidden="true"></span>
+		<span onclick="openGallery()" class="fa fa-music" aria-hidden="true"></span>
 		<a href="https://loistotahti.fi/shop/"><span class="fa fa-shopping-cart" aria-hidden="true"></span></a>
 		<span onclick="openInfo()" class="fa fa-info-circle" aria-hidden="true"></span>
 		<span onclick="openProfile()" class="fa fa-user" aria-hidden="true"></span>
@@ -116,6 +119,7 @@ if(empty($_SESSION['userid']))
 function openProfile(){
 	document.getElementById('profiili').style.display = 'initial';
 	document.getElementById('infopanel').style.display = 'none';
+		document.getElementById('aanitegalleria').style.display = 'none';
 }
 
     function check(input) {
@@ -152,6 +156,7 @@ function openProfile(){
 function openInfo(){
 	document.getElementById('infopanel').style.display = 'initial';
 	document.getElementById('profiili').style.display = 'none';
+	document.getElementById('aanitegalleria').style.display = 'none';
 }
 
 var acc = document.getElementsByClassName("accordion");
@@ -162,6 +167,75 @@ for (i = 0; i < acc.length; i++) {
         this.classList.toggle("active");
         this.nextElementSibling.classList.toggle("show");
   }
+}
+</script>
+
+
+<div id="aanitegalleria">
+	<table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Äänite</th>
+                <th>Kategoria</th>
+                <th>Pituus</th>
+            </tr>
+        </thead>
+		<tbody style="text-align: center;">
+<?php 
+//Connect to database server
+$yhteys = mysql_connect('localhost', 'root', 'rootpass');
+//Choose database
+mysql_select_db('rentoutussovellus', $yhteys);
+
+//Get email and password with that matches the email that was inputted
+$result = mysql_query("SELECT aanitteet.nimi, aanitteet.kategoria, aanitteet.kesto, aanitteet.filename FROM users, omistetut_aanitteet, aanitteet WHERE users.user_id = omistetut_aanitteet.user_id AND omistetut_aanitteet.aanite_id = aanitteet.aanite_id", $yhteys);
+
+//how many results
+$lkm = mysql_num_rows($result);
+
+//Tulokset läpi
+$i = 1;
+
+while($i <= $lkm) {
+	
+	
+	$rivi = mysql_fetch_assoc($result);
+	echo "<tr onclick=\"updateSource('" . $rivi['filename'] . "') \">";
+	echo "<td>" . $rivi['nimi'] . "</td>";
+	echo "<td>". $rivi['kategoria'] . "</td>";
+	echo "<td>" . gmdate("i:s" ,$rivi['kesto']) . "</td>";
+	echo "</tr>";
+	
+	
+	$i++;
+	}
+
+
+
+
+
+?>
+		</tbody>		
+<table>
+</div>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+	      "paging":   false,
+        "info":     false
+} );
+} );
+
+</script>
+
+<script>
+
+function openGallery(){
+	
+	document.getElementById('infopanel').style.display = 'none';
+	document.getElementById('aanitegalleria').style.display = 'initial';
+	document.getElementById('profiili').style.display = 'none';
+	
 }
 </script>
 <div id="audiocontainer">
@@ -224,7 +298,14 @@ function pause() { 	audioPlayer.pause();
 					document.getElementsByClassName('play')[0].style.display='initial';
 				}
 
+ function updateSource(input) { 
+        var source = "aanitteet/mp3/" + input + ".mp3";
 
+		audioPlayer.src = source;
+		
+        audioPlayer.load(); //call this to just preload the audio without playing
+        audioPlayer.play(); //call this to play the song right away
+    }
 
 function progressBar() { 
 	var audioPlayer = document.getElementById('audioSource'); 
@@ -238,6 +319,10 @@ function progressBar() {
 			if (elapsedTimeMin < 10){
 		elapsedTimeMin = "0" + elapsedTimeMin;
 	}
+	
+	
+	
+	
 	document.getElementById('currentProgressText').innerHTML = elapsedTimeMin + ":" + elapsedTimeSec;
 	var durationMin = Math.floor(audioPlayer.duration / 60);
 	var durationSec = Math.floor(audioPlayer.duration - durationMin * 60);
