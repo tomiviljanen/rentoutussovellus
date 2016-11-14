@@ -9,8 +9,9 @@
 	crossorigin="anonymous">
 </script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/u/dt/dt-1.10.12/datatables.min.css"/>
- 
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
 <script type="text/javascript" src="https://cdn.datatables.net/u/dt/dt-1.10.12/datatables.min.js"></script>
+<script type="text/javascript" src="jqueryui/jquery-ui.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <!-- Load Stylesheet for the rest -->
 <link rel="stylesheet" type="text/css" href="index.css">
@@ -23,12 +24,14 @@
 <?php
 //Start session
 session_start();
+include("db.php");
 //If there is no userid(meaning no login info) redirect back to login page
-if(empty($_SESSION['userid']))
+ if(empty($_SESSION['userid']))
     {
 	//Redirect to login page
-    header('Location:login.php');;
-    }else{		
+    header('Location:login.html');;
+	}
+
 ?>
 
 <!-- Työpöyädn navigointi -->
@@ -58,12 +61,20 @@ if(empty($_SESSION['userid']))
 		<span onclick="openProfile()" class="fa fa-user" aria-hidden="true"></span>
 	</div>
 </div>
-<div id="drop-userinfo">
+
+
+<div id="profile_div">
 	<ul>
 		<li onClick="openProfile()">Oma profiili</li>
-		<a href="logout.php"<li>Kirjaudu ulos</li></a>
+		<li><a href="logout.php"><li>Kirjaudu ulos</li></a>
+	</ul>
 </div>
+<script>
+function userinfoDrop(){
+	$('#profile_div').toggle("fast");
+}
 
+</script>
 <!-- Käyttäjä profiili -->
 <div id="profiili">
 <h2>Oma Profiili</h2>
@@ -106,20 +117,20 @@ if(empty($_SESSION['userid']))
 		<td><input id="verifypass" name="verifypass" type="password" required oninput="check(this)" /></td>
 		</tr>
 		<tr>
-		<td colspan="2"	><input type="submit" value="Vaihda salasana"></td>
+		<td colspan="2"	><input type="submit" id="password_submit" value="Vaihda salasana"></td>
 		</table>
 	</form>
 </div>
 <script>
 //opens my profile
 function openProfile(){
-	document.getElementById('profiili').style.display = 'initial';
-	document.getElementById('infopanel').style.display = 'none';
-		document.getElementById('aanitegalleria').style.display = 'none';
+	$('#profiili').show();
+	$('#infopanel').hide();
+	$('#aanitegalleria').hide();
 }
 
     function check(input) {
-        if (input.value != document.getElementById('newpass').value) {
+        if (input.value != $('#newpass').val()) {
             input.setCustomValidity('Password Must be Matching.');
         } else {
             // input is valid -- reset the error message
@@ -127,7 +138,7 @@ function openProfile(){
         }
     }
     function checkMail(input) {
-        if (input.value != document.getElementById('newmail').value) {
+        if (input.value != $('#newmail').val()) {
             input.setCustomValidity('Email Must be Matching.');
         } else {
             // input is valid -- reset the error message
@@ -150,23 +161,20 @@ function openProfile(){
 </div>
 <script>
 function openInfo(){
-	document.getElementById('infopanel').style.display = 'initial';
-	document.getElementById('profiili').style.display = 'none';
-	document.getElementById('aanitegalleria').style.display = 'none';
+	$('#infopanel').show();
+	$('#profiili').hide();
+	$('#aanitegalleria').hide();
 }
 
-var acc = document.getElementsByClassName("accordion");
-var i;
+var acc = $(".accordion");
 
-for (i = 0; i < acc.length; i++) {
+for (var i = 0; i < acc.length; i++) {
     acc[i].onclick = function(){
         this.classList.toggle("active");
         this.nextElementSibling.classList.toggle("show");
   }
 }
 </script>
-
-
 <div id="aanitegalleria">
 	<table id="aanitetable" class="display" cellspacing="0" width="100%">
         <thead>
@@ -178,60 +186,37 @@ for (i = 0; i < acc.length; i++) {
         </thead>
 		<tbody style="text-align: center;">
 <?php 
-//Connect to database server
-$yhteys = mysql_connect('localhost', 'root', 'rootpass');
-//Choose database
-mysql_select_db('rentoutussovellus', $yhteys);
 
 //Get email and password with that matches the email that was inputted
-$result = mysql_query("SELECT aanitteet.nimi, aanitteet.kategoria, aanitteet.kesto, aanitteet.filename FROM users, omistetut_aanitteet, aanitteet WHERE users.user_id = omistetut_aanitteet.user_id AND omistetut_aanitteet.aanite_id = aanitteet.aanite_id", $yhteys);
+$sql = "SELECT aanitteet.nimi, aanitteet.kategoria, aanitteet.kesto, aanitteet.filename FROM users, omistetut_aanitteet, aanitteet WHERE users.user_id = omistetut_aanitteet.user_id AND omistetut_aanitteet.aanite_id = aanitteet.aanite_id";
 
-//how many results
-$lkm = mysql_num_rows($result);
+$result = $con->query($sql);
 
-//Tulokset läpi
-$i = 1;
-
-
-while($i <= $lkm) {
-
-
-		
-	$rivi = mysql_fetch_array($result);
-	
-	$arrayfilename[$i] = $rivi['filename'];
-	
-	echo "<tr onclick=\"updateSource('" . $arrayfilename[$i] . "', '" . $rivi['nimi'] . "') \">";
-	echo "<td>" . $rivi['nimi'] . "</td>";
-	echo "<td>". $rivi['kategoria'] . "</td>";
-	echo "<td>" . gmdate("i:s" ,$rivi['kesto']) . "</td>";
-	echo "</tr>";
-	
-	
-	
-	$i++;
+if($result->num_rows > 0){
+	while($row = $result->fetch_assoc()){
+			echo "<tr onclick=\"updateSource('" . $row['filename'] . "', '" . $row['nimi'] . "') \">";
+			echo "<td>" . $row['nimi'] . "</td>";
+			echo "<td>". $row['kategoria'] . "</td>";
+			echo "<td>" . gmdate("i:s" ,$row['kesto']) . "</td>";
+			echo "</tr>";
 	}
+}
+
 ?>
 		</tbody>		
 	</table>
 	<script>
 $(document).ready(function() {
     $('#aanitetable').DataTable( {
-	      "paging":   false,
+	    "paging":   false,
         "info":     false
 } );
 } );
 
-</script>
-
-<script>
-
 function openGallery(){
-	
-	document.getElementById('infopanel').style.display = 'none';
-	document.getElementById('aanitegalleria').style.display = 'initial';
-	document.getElementById('profiili').style.display = 'none';
-	
+	$('#infopanel').hide();
+	$('#aanitegalleria').show();
+	$('#profiili').hide();	
 }
 </script>
 </div>
@@ -251,7 +236,7 @@ function openGallery(){
 	<div id="slidercontainer">
 		<div id="media-buttons" class="mutebutton" style=" text-align:center;" onclick="muteSound()"><span id="icons"  class="fa fa-volume-up"></span></div>
 		<div id="media-buttons" class="unmutebutton" style="display:none; text-align:center;" onclick="unmuteSound()"><span id="icons"  class="fa fa-volume-off"></span></div>
-		<input id="volumeSlider" type="range" min="0" max="100" value="50"></input>
+		<input id="volumeslider" orient="vertical" oninput="changeVolume(this.value)" type="range" min="0" max="100" value="50"></input>
 	</div>
 </div>
 
@@ -259,11 +244,7 @@ function openGallery(){
 <h2 id="songname">Valitse äänite galleriasta</h2>
 <br class="responsivebreak">
 
-<div id="progressbar" class="progressbar">
-            <canvas id="canvas" height="20" width="500px">
-                canvas not supported
-            </canvas>
-</div>
+<input disabled id="progressbar" oninput="changeTime(this.value)" onchange="changeTime(this.value)" type="range" min="0" max="1000" step="0.1" value="0"/>
 
 <div id="progresstext">
 	<label for="progressbar" id="currentProgressText">00:00</label>
@@ -273,183 +254,103 @@ function openGallery(){
 
 
 <script>
+var audioPlayer = document.getElementById('audioSource');
+audioPlayer.addEventListener("timeupdate", progressBar, true);
 
-		
-Array.prototype.indexOf = function(elem) {
-    for (var i = 0; i < this.length; i++){
-        if (this[i].id === elem)
-            return i;
-    }
-    return -1;
+function play() {
+	if(audioPlayer.src){
+		audioPlayer.play();
+		$('.play').hide();
+		$('.pause').show();
+	}
 }
 
+function pause() {
+	if(audioPlayer.src){
+		audioPlayer.pause();
+		$('.play').show();
+		$('.pause').hide();
+	}		
+}
 
-var audioPlayer = document.getElementById('audioSource');
+function updateSource(input, songname) { 
+	var source = "aanitteet/mp3/" + input + ".mp3";
+	audioPlayer.src = source;
+	$('#songname').text(songname);
+	audioPlayer.load(); //call this to just preload the audio without playing
+	audioPlayer.play(); //call this to play the song right away
+	$('.play').hide();
+	$('.pause').show();
+	$('#progressbar').removeAttr('disabled');
+}
 
-audioPlayer.addEventListener("timeupdate", progressBar, true); 
-
-var can = document.querySelector('canvas');
-canCtx = can.getContext('2d');
-
-  width = $(can).parent().width();
-  can.width = width;
-
-$(window).resize(function () {
-  width = $(can).parent().width();
-  can.width = width;
-});
-
-
-
-
-var fileArray = <?php echo json_encode($arrayfilename); ?>;
-
-
-var currentSong;
-
-function play() { 	
-				if(!audioPlayer.src){
-					
-				}else{
-					audioPlayer.play();
-					document.getElementsByClassName('play')[0].style.display='none';
-					document.getElementsByClassName('pause')[0].style.display='initial';
-				}
-				}
-function pause() { 	audioPlayer.pause();
-					document.getElementsByClassName('pause')[0].style.display='none';
-					document.getElementsByClassName('play')[0].style.display='initial';
-				}
-
-				
-				
-			
-
- function updateSource(input, songname) { 
-        var source = "aanitteet/mp3/" + input + ".mp3";
-
-		
-		audioPlayer.src = source;
-		document.getElementById('songname').innerHTML = songname;
-        audioPlayer.load(); //call this to just preload the audio without playing
-        audioPlayer.play(); //call this to play the song right away
-		document.getElementsByClassName('play')[0].style.display='none';
-		document.getElementsByClassName('pause')[0].style.display='initial';
-    }
-
-	function forward(){
-	
-	var fwdSource = "aanitteet/mp3/" + fileArray[currentSong] + ".mp3";
-	
+function forward(){
 	alert(fwdSource);
-	
 }	
 	
 
+function changeTime(newTime){
+	setTime = (newTime * audioPlayer.duration) / 1000
+	audioPlayer.currentTime = setTime;
+	audioPlayer.play();
+	$('.play').hide();
+	$('.pause').show();
+}	
 	
 	
-function progressBar() { 
-	var audioPlayer = document.getElementById('audioSource'); 
-	//get current time in seconds
-	var elapsedTime = Math.round(audioPlayer.currentTime);
-	var elapsedTimeMin = Math.floor(audioPlayer.currentTime / 60);
-	var elapsedTimeSec = Math.floor(audioPlayer.currentTime - elapsedTimeMin * 60);
-			if (elapsedTimeSec < 10){
-		elapsedTimeSec = "0" + elapsedTimeSec;
-	}
-			if (elapsedTimeMin < 10){
-		elapsedTimeMin = "0" + elapsedTimeMin;
-	}
+function progressBar(){
+	
+	var minutesElapsed = Math.floor(Math.ceil(audioPlayer.currentTime) / 60);
+	var secondsElapsed = Math.floor(Math.ceil(audioPlayer.currentTime) % 60);
+	
+	if(minutesElapsed < 10) minutesElapsed = "0" + minutesElapsed;
+	if(secondsElapsed < 10) secondsElapsed = "0" + secondsElapsed;
+	
+	$('#currentProgressText').text(minutesElapsed + ":" + secondsElapsed);
+	
+	if(minutesDuration < 10) minutesDuration = "0" + minutesDuration;
+	if(secondsDuration < 10) secondsDuration = "0" + secondsDuration;
+	
+	var minutesDuration = Math.floor(Math.ceil(audioPlayer.duration) / 60);
+	var secondsDuration = Math.floor(Math.ceil(audioPlayer.duration) % 60);
+	$('#durationText').text(minutesDuration + ":" + secondsDuration);
 	
 	
-
-	
-	document.getElementById('currentProgressText').innerHTML = elapsedTimeMin + ":" + elapsedTimeSec;
-	var durationMin = Math.floor(audioPlayer.duration / 60);
-	var durationSec = Math.floor(audioPlayer.duration - durationMin * 60);
-	if (durationMin < 10){
-		durationMin = "0" + durationMin;
-	}
-	if (durationSec < 10){
-		durationSec = "0" + durationSec;
-	}
-	document.getElementById('durationText').innerHTML = durationMin + ":" + durationSec;
-	//update the progress bar
-	if (canvas.getContext) {
-		var ctx = canvas.getContext("2d");
-		//clear canvas before painting
-		ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-		ctx.fillStyle = "rgb(255,0,0)";
-		var fWidth = (elapsedTime / audioPlayer.duration) * (canvas.clientWidth);
-		if (fWidth > 0) {
-			ctx.fillRect(0, 0, fWidth, canvas.clientHeight);
-		}
-	}
+	var elapsedPercent = (audioPlayer.currentTime / audioPlayer.duration) * 1000;
+	$('#progressbar').val(elapsedPercent);
 }
 
-window.setInterval(function(){
-	var volume = document.getElementById("volumeSlider").value / 100;
-	audioPlayer.volume = volume;
-	
-}, 100);
 
-function userinfoDrop(){
-	
-	if(document.getElementById("drop-userinfo").style.display == 'none'){
-	document.getElementById("drop-userinfo").style.display = 'initial';
-	}else{
-			document.getElementById("drop-userinfo").style.display = 'none';
-	}
-	}
+function changeVolume(volume){
+	audioPlayer.volume = volume / 100;
+}
+
 
 function openVolumeSlider(){
-	document.getElementById("slidercontainer").style.display = 'table';
-	document.getElementsByClassName('openbutton')[0].style.display = 'none';
-	document.getElementsByClassName('closebutton')[0].style.display = 'initial';
+	$("#slidercontainer").show();
+	$('.openbutton').hide();
+	$('.closebutton').show();
 }
 
 function closeVolumeSlider(){
-	document.getElementById("slidercontainer").style.display = 'none';
-	document.getElementsByClassName('openbutton')[0].style.display = 'initial';
-	document.getElementsByClassName('closebutton')[0].style.display = 'none';
+	$("#slidercontainer").hide();
+	$('.openbutton').show();
+	$('.closebutton').hide();
 }
 
 function muteSound(){
 	audioPlayer.muted = true;
-	document.getElementsByClassName('mutebutton')[0].style.display = 'none';
-	document.getElementsByClassName('unmutebutton')[0].style.display = 'initial';
+	$('.mutebutton').hide();
+	$('.unmutebutton').show();
 }
 
 function unmuteSound(){
 	audioPlayer.muted = false;
-	document.getElementsByClassName('mutebutton')[0].style.display = 'initial';
-	document.getElementsByClassName('unmutebutton')[0].style.display = 'none';
+	$('.mutebutton').show();
+	$('.unmutebutton').hide();
 }
-
-
-                //set up mouse click to control position of audio
-                canvas.addEventListener("click", function(e) {
-                    //this might seem redundant, but this these are needed later - make global to remove these
-                    var audioPlayer = document.getElementById('audioSource'); 
-                    var canvas = document.getElementById('canvas');            
-
-                    if (!e) {
-                        e = window.event;
-                    } //get the latest windows event if it isn't set
-                    try {
-                        //calculate the current time based on position of mouse cursor in canvas box
-                        audioPlayer.currentTime = audioPlayer.duration * (e.offsetX / canvas.clientWidth);
-                    }
-                    catch (err) {
-                    // Fail silently but show in F12 developer tools console
-                        if (window.console && console.error("Error:" + err));
-                    }
-                }, true);
             
 </script>
 </div>
-<?php
-}
-?>
 </body>
 </html>

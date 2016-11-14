@@ -1,0 +1,67 @@
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
+<title></title>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="loginpage.css">
+</head>
+<body>
+<div class="container">
+<div class="content">
+	<!-- Kirjautuiminen sisään-->
+	<div class="whitecontainer">
+	<form id="log in" method="post" action="loginverify.php">
+	
+		<h2>Kirjaudu sisään</h2>
+		<table class="logintable">
+		<tr>
+		<td><label for="email">Sähköposti</label></td>
+		<td><input type="email" name="email" id="email" required/></td>
+		</tr>
+		<tr>
+		<td><label for="password">Salasana</label></td>
+		<td><input type="password" name="password" id="password" required/></td>
+		</tr>
+		<tr>
+		<td colspan=2 class="buttoncell"><input class="button" type="submit" value="Kirjaudu sisään >>"></td>
+		</tr>
+		</table>
+	</form>
+	</div>
+<!--- </div>
+<div class="content"> --->
+	<!-- Uuden käyttäjän teko-->
+	<hr>
+	<div class="whitecontainer">
+	<form id="create user" method="post" action="createuser.php">
+		<h2>Luo uusi käyttäjä</h2>
+		<table class="logintable">
+		<tr>
+		<td><label for="firstname">Etunimi</label></td>
+		<td><input type="text" name="firstname" id="firstname" required/></td>
+		</tr>
+		<tr>
+		<td><label for="surname">Sukunimi</label></td>
+		<td><input type="text" name="surname" id="surname" required/></td>
+		</tr>
+		<tr>
+		<td><label for="password">Salasana</label></td>
+		<td><input type="password" name="password" id="password" required/></td>
+		</tr>
+		<tr>
+		<td><label for="email">Sähköposti</label></td>
+		<td><input type="email" name="email" id="email" required/></td>
+		</tr>
+		<tr>
+		<td colspan=2 class="buttoncell"><span><i>Kaikki kentät ovat pakollisia</i></span><br>
+		<input class="button" type="Submit" value="Luo käyttäjä">
+		</td>
+		</tr>
+		</table>
+
+	</form>
+	</div>
+</div>
+</div>
+</body>
+</html>

@@ -7,24 +7,19 @@
 <body>
 <?php
 //Variables
-$firstname = make_safe($_POST['firstname']);
-$surname = make_safe($_POST['surname']);
+$firstname = $_POST['firstname'];
+$surname = $_POST['surname'];
 $hashedpass = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $email = $_POST['email'];
-if (empty ($password) || empty ($email)) { 
-echo "<h3>Alueet eiv&aumlt saa olla tyhjiä</h3>";
-echo "<a href=\"login.php\">Takaisin</a>";} else {
-//Connect to database
-$yhteys = mysql_connect('localhost', 'root', 'rootpass');
-//Choose the database
-mysql_select_db('rentoutussovellus', $yhteys);
-//Add user to database
-mysql_query("INSERT INTO users (fname, lname, pass, sahkoposti, admin) VALUES ('$firstname', '$surname', '$hashedpass', '$email', 'false')");
-//Disconnect from database
-mysql_close($yhteys);
-//Redirect back to index page
-header("Location: login.php");
-}
+
+//Database
+include('db.php');
+$statement = $con->prepare("INSERT INTO users (fname, lname, sahkoposti, pass, admin) VALUES (?, ?, ?, ?, 0)");
+$statement->bind_param('ssss', $firstname, $surname, $email, $hashedpass);
+$statement->execute();
+$con->close();
+header("Location: login.html");
+
 ?>
 
 </body>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Log in</title>
+<title>Change pass</title>
 </head>
 <body>
 <style>
@@ -22,45 +22,26 @@ color: #46a5e5;
 <?php
 session_start();
 $newpass = $_POST['newpass'];
-$verifypass = $_POST['verifypass'];
 $oldpass = $_POST['oldpass'];
 $userid = $_SESSION['userid'];
-if(strcmp($newpass, $verifypass) == 0){	
-	$hashedpass = password_hash($newpass, PASSWORD_DEFAULT);
-}else{
-	header("Location: error.php");
-}
+$hashedpass = password_hash($newpass, PASSWORD_DEFAULT);
 
-$yhteys = mysql_connect('localhost', 'root', 'rootpass');
-//Choose database
-mysql_select_db('rentoutussovellus', $yhteys);
-
-//Get email and password with that matches the email that was inputted
-$result = mysql_query("SELECT pass, user_id FROM users WHERE user_id = '$userid'", $yhteys);
-
-//how many results
-$lkm = mysql_num_rows($result);
-
-//Tulokset läpi
-$i = 1;
-
-while($i <= $lkm) {
-	
-	$rivi = mysql_fetch_assoc($result);
-	//Check to see if inputted password matches  the one on the database
-	if(password_verify($oldpass, $rivi['pass'])){
-		//Password matches
-		mysql_query("UPDATE users SET pass = '$hashedpass' where user_id = $userid");
-		echo "Salasanan vaihto onnistui, sinut ohjataan takaisin etusivulle 5 sekunnin kuluttua";
-		echo "<br><a href=\"index.php\">Paina tästä linkistä jos sinua ei auttomaattisesti ohjata etusivulle</a>";
-		header('refresh: 5; URL=index.php');
+include('db.php');
+	$statement_password = $con->prepare("SELECT pass FROM users WHERE user_id = ?");
+	$statement_password->bind_param('i', $_SESSION['userid']);
+	$statement_password->execute();
+	$statement_password->bind_result($old_pass);
+	$statement_password->fetch();
+	$statement_password->close();
+	if(password_verify($oldpass, $old_pass)){
+		$statement_newpassword = $con->prepare("UPDATE users SET pass= ? WHERE user_id= ?");
+		$statement_newpassword->bind_param('si', $hashedpass, $userid);
+		$statement_newpassword->execute();
+		header('Location: index.php');
 	}else{
-		//Password doesnt match
-		echo "Nykyinen salasana oli virheellinen";
-		echo "<br><a href=\"index.php\">Takaisin</a>";
+		echo "old password is not correct";
 	}
-	$i++;
-}
-?></div>
+?>
+</div>
 </body>
 </html>

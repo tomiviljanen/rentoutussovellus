@@ -1,3 +1,7 @@
+li, a, p, h1, h2, h3, h4, label, th, td, span {
+	font-family: 'Raleway', sans-serif;
+}
+
 body{
 	margin: 0;
 	padding: 0;
@@ -16,8 +20,8 @@ float: right;
     height: 50px;
 }
 #headerdesktop{
-	background-color: #A50E2D;
-	color: #dbdc2b;
+	background-color: #FD6E42;
+	color: black;
 }
 
 #menubutton{
@@ -28,7 +32,7 @@ float: right;
 }
 
 #menubutton:hover{
-	background-color: black;
+	background-color: #FD450D;
 	transition: 150ms linear;
 }
 #nav{
@@ -37,7 +41,7 @@ float: right;
 	min-height: 50px;
 	height: 50px;
 	line-height: 0.5em;
-	background-color: #A50E2D;
+
 }
 
 #navlist li{
@@ -75,7 +79,7 @@ float: right;
 }
 
 #audiocontainer{
-	background-color: rgba(165, 14, 45, 1);
+	background-color: #FD6E42;
 	width: 100%;
 	min-height: 50px;
 	position: fixed;
@@ -105,33 +109,24 @@ float: right;
 
 }
 
-.progressbar{
-	height: 20px;
-
-	background-color: yellow;
-	
-}
 #progresstext{
 
 	margin-right: 10px;
 	display: inline-block;
 }
-
-input[type="range"]{
-	position: absolute;
-	top: 120px;
-	left: -65px;
-   transform: rotate(270deg);
+#volumeslider{
+   -webkit-appearance: slider-vertical;
+   writing-mode: bt-lr;
+   width: 8px;
+   height: 170px;
 }
 
 #slidercontainer{
 	display: none;
-	   position: absolute;
-
-
-   width: 50px;
-   background-color: #A50E2D;
-   height: 230px;
+	position: absolute;
+	width: 50px;
+	background-color: #FD6E42;
+	height: 230px;
 }
 #slidercontainer #media-buttons{
 	margin-top: -12px;
@@ -139,15 +134,15 @@ input[type="range"]{
 #imagecover{
 	display: inline-block;
 	float:left;
-	}
-	
+}	
 #userform{
 	display: inline-block;
 	position:relative;
 	text-align: center;
-	
 }
-#drop-userinfo{display: none;}
+#drop-userinfo{
+	display: none;
+}
 
 #profiili{
 	text-align: center;
@@ -169,9 +164,13 @@ input[type="range"]{
 	display: none;
 	text-align: center;
 }
+#aanitegalleria{
+	display: none;
+}
+
 button.accordion {
-    background-color: #eee;
-    color: #444;
+    background-color: #FD6E42;
+    color: black;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -183,13 +182,13 @@ button.accordion {
 }
 
 button.accordion.active, button.accordion:hover {
-    background-color: #ddd;
+    background-color: #FD450D;
 }
 
 button.accordion:after {
     content: '\02795';
     font-size: 13px;
-    color: #777;
+	color: black;
     float: right;
     margin-left: 5px;
 }
@@ -212,52 +211,149 @@ div.panel.show {
     max-height: 500px;  
 }
 
-
-
-#aanitegalleria{
-	display: none;
-}
-
 #aanitetable{
 	cursor: pointer;
 }
+
+#profile_div{
+	position: absolute;
+	right: 0;
+	z-index: 1000;
+	text-align: center;
+	background-color: #FD6E42;
+	display: none;
+}
+
+#profile_div ul {
+	list-style: none;
+	padding: 0px 20px;
+	cursor: pointer;
+}
+#profile_div ul a {
+	text-decoration: none;
+	color: black;
+}	
+
+#progressbar {
+	-webkit-appearance: none;
+	margin: 10px 0;
+	max-width: 500px;
+	width: 500px;
+	margin-top: 25px;
+}
+input[type="range"]:focus {
+	outline: none;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 5px;
+	cursor: pointer;
+	animate: 0.2s;
+	box-shadow: 0px 0px 1px #FFFFFF;
+	background: #FFF;
+	border-radius: 5px;
+}
+input[type="range"]::-webkit-slider-thumb {
+	border: 1px solid #000000;
+	height: 15px;
+	width: 15px;
+	border-radius: 15px;
+	background: #FFFFFF;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -5.5px;
+}
+input[type="range"]:focus::-webkit-slider-runnable-track {
+	background: #FD6E42;
+}
+#progressbar::-moz-range-track {
+	width: 100%;
+	height: 5px;
+	cursor: pointer;
+	animate: 0.2s;
+	box-shadow: 0px 0px 1px #FFFFFF;
+	background: #FFF;
+	border-radius: 5px;
+}
+#volumeslider::-moz-range-track {
+	width: 5px;
+	height: 100%;
+	cursor: pointer;
+	animate: 0.2s;
+	box-shadow: 0px 0px 1px #FFFFFF;
+	background: #FFF;
+	border-radius: 5px;
+}
+input[type="range"]::-moz-range-thumb {
+	border: 1px solid #000000;
+	height: 15px;
+	width: 15px;
+	border-radius: 15px;
+	background: #FFFFFF;
+	cursor: pointer;
+}
+#progressbar::-ms-track {
+	width: 100%;
+	height: 5px;
+	cursor: pointer;
+	animate: 0.2s;
+	background: transparent;
+	border-color: transparent;
+	color: transparent;
+}
+#volumeslider::-ms-track {
+	width: 5px;
+	height: 100%;
+	cursor: pointer;
+	animate: 0.2s;
+	background: transparent;
+	border-color: transparent;
+	color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+	background: #FFF;
+	border-radius: 10px;
+	box-shadow: 0px 0px 1px #FFFFFF;
+}
+input[type="range"]::-ms-fill-upper {
+	background: #FFF;
+	border-radius: 10px;
+	box-shadow: 0px 0px 1px #FFFFFF;
+}
+input[type="range"]::-ms-thumb {
+	border: 1px solid #000000;
+	height: 15px;
+	width: 15px;
+	border-radius: 15px;
+	background: #FFFFFF;
+	cursor: pointer;
+}
+input[type="range"]:focus::-ms-fill-lower {
+	background: #FFF;
+}
+input[type="range"]:focus::-ms-fill-upper {
+	background: #FFF;
+}
 @media screen and (min-width: 1150px){
-            .responsivebreak { display: none; }
-			.progressbar{margin-right: 20px; 	float: right; 	margin-top: 28px;}
-			#progresstext{float: right; 	line-height: 75px;}
-			#media-buttons{float: left;}
-			#media-buttons span{	line-height: 75px;}
-			#songname{float: left; 	line-height: 75px;}
-			#slidercontainer{   left: 225px;    bottom: 75px;}
-
-        }
-		
-	@media screen and (min-width: 550px){
-				.progressbar{width: 500px;}
-							#headermobile{display: none;}
-		
-	}
-	@media screen and (max-width: 1149px){
-
-		.progressbar{
-			margin-left: auto;
-			margin-right: auto;
-			margin-top: 5px;
-		}
-		#imagecover{
-			display:none;
-		}
-		#progresstext{
-			line-height: 30px;
-		}
-		#slidercontainer{left: 60%; bottom: 125px;}
-	}
-	@media screen and (max-width: 549px){
-		.progressbar{width: 90%;}
-		#imagecover{display:none;}
-				#headerdesktop{
-			display: none;
-			
-		}
-		#drop-userinfo{display: none;}
-	}
+    .responsivebreak { display: none; }
+	#progresstext{float: right;	line-height: 75px;}
+	#media-buttons{float: left;}
+	#media-buttons span{line-height: 75px;}
+	#songname{float: left; 	line-height: 75px;}
+	#slidercontainer{   left: 225px;    bottom: 75px;} 
+}
+	
+@media screen and (min-width: 550px){
+	#headermobile{display: none;}	
+}
+	
+@media screen and (max-width: 1149px){
+	#imagecover{display:none;}
+	#progresstext{line-height: 30px;}
+	#slidercontainer{left: 60%; bottom: 125px;}
+}
+@media screen and (max-width: 549px){
+	#imagecover{display:none;}
+	#headerdesktop{display: none;}
+	#drop-userinfo{display: none;}
+}

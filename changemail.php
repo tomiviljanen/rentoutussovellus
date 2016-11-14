@@ -22,25 +22,16 @@ color: #46a5e5;
 <?php
 session_start();
 $newmail = $_POST['newmail'];
-$verifymail = $_POST['verifymail'];
 $userid = $_SESSION['userid'];
-if(strcmp($newmail, $verifymail) == 0){	
-	$checkmail = $newmail;
-}else{
-	header("Location: error.php");
-}
 
-$yhteys = mysql_connect('localhost', 'root', 'rootpass');
-//Choose database
-mysql_select_db('rentoutussovellus', $yhteys);
-
-//Get email and password with that matches the email that was inputted
-mysql_query("UPDATE users SET sahkoposti = '$checkmail' where user_id = $userid");
-$_SESSION['email'] = $checkmail;
-echo "Sähköpostin vaihto onnistui, sinut ohjataan takaisin etusivulle 5 sekunnin kuluttua";
-echo "<br><a href=\"index.php\">Paina tästä linkistä jos sinua ei auttomaattisesti ohjata etusivulle</a>";
-header('refresh: 5; URL=index.php');
-
-?></div>
+include('db.php');
+	$statement_password = $con->prepare("UPDATE users SET sahkoposti = ? WHERE user_id = ?");
+	$statement_password->bind_param('si', $newmail , $_SESSION['userid']);
+	$statement_password->execute();
+	$statement_password->close();
+	$_SESSION['email'] = $newmail;
+	header("Location: index.php")
+?>
+</div>
 </body>
 </html>
