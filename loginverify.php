@@ -29,45 +29,27 @@ if (empty ($password) || empty ($email)) {
 echo "<h3>Alueet eiv&aumlt saa olla tyhjiä</h3>";
 echo "<a href=\"login.php\">Takaisin</a>";} else {
 //Connect to database server
-$yhteys = mysql_connect('localhost', 'root', 'rootpass');
-//Choose database
-mysql_select_db('rentoutussovellus', $yhteys);
+include('db.php');
+$statement = $con->prepare("SELECT fname, lname, sahkoposti, pass, user_id FROM users WHERE sahkoposti = ?");
+$statement->bind_param('s', $email);
+$statement->execute();
+$statement->bind_result($fname, $lname, $sahkoposti, $pass, $user_id);
+$statement->fetch();
 
-//Get email and password with that matches the email that was inputted
-$result = mysql_query("SELECT fname, lname, sahkoposti, pass, user_id FROM users WHERE sahkoposti = '$email' AND valid = 1", $yhteys);
-
-//how many results
-$lkm = mysql_num_rows($result);
-
-//Tulokset läpi
-$i = 1;
-if($lkm == 0){
-		echo "Sähköposti ja salasana eivät täsmää";	
-	}else{
-while($i <= $lkm) {
-	
-	$rivi = mysql_fetch_assoc($result);
-	//Check to see if inputted password matches  the one on the database
-	if(password_verify($password, $rivi['pass'])){
-		//Password matches
-		echo "Kirjatuminen sisään onnistui, sinut uudelleenohjataan etusivulle";
-		$_SESSION["userid"] = $rivi['user_id'];
-		$_SESSION["firstname"] = $rivi['fname'];
-		$_SESSION["surname"] = $rivi['lname'];
-		$_SESSION["email"] = $rivi['sahkoposti'];
-		session_write_close();
-		header("Location: index.php");
-	}else{
-		//Password doesnt match
-		echo "Sähköposti ja salasana eivät täsmää";
-	}
-	$i++;
-	}
+if(password_verify($password, $pass)){
+	$_SESSION["userid"] = $user_id;
+	$_SESSION["firstname"] = $fname;
+	$_SESSION["surname"] = $lname;
+	$_SESSION["email"] = $sahkoposti;
+	session_write_close();
+	header("Location: index.php");
+}else{
+	echo "Salasana ja sähköposti eivät täsmää";
 }
 //Back to sign in page link
 echo "<br><a href=\"login.php\">Takaisin</a>";
 //Close connection to database
-mysql_close($yhteys);
+$con->close();
 }
 ?>
 </div>
