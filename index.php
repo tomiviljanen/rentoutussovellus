@@ -26,12 +26,10 @@
 session_start();
 include("db.php");
 //If there is no userid(meaning no login info) redirect back to login page
- if(empty($_SESSION['userid']))
-    {
+if(empty($_SESSION['userid'])){
 	//Redirect to login page
     header('Location:login.html');;
-	}
-
+}
 ?>
 
 <!-- Työpöyädn navigointi -->
@@ -82,44 +80,47 @@ function userinfoDrop(){
 <h4>Nimi: <?php echo ucfirst($_SESSION['firstname']) . " " . ucfirst($_SESSION['surname']) ?></h4>
 <h4>Sähköposti: <?php echo $_SESSION['email'] ?></h4>
 
-<h3>Vaihda tietoja</h3>
+<button class="accordion">Vaihda tietoja</button>
+<div clasS="panel">
 <div id="userform">
 	<form method="post" action="changemail.php">
 		<h4>Sähköpostin vaihto</h4>
-		<table>
+		<table class="logintable">
 		<tr>
-		<th><label for="newmail">Uusi sähköposti:</label></th>
-		<td><input id="newmail" name="newmail" type="email"/></td>
+		<td><label for="newmail">Uusi sähköposti:</label></td>
+		<td><input id="newmail" name="newmail" type="email" required/></td>
 		</tr>
 		<tr>
-		<th><label for="verifymail">Vahvista uusi sähköposti:</label></th>
-		<td><input id="verifymail" name="verifymail" type="email" oninput="checkMail(this)"/></td>
+		<td><label for="verifymail">Vahvista uusi sähköposti:</label></td>
+		<td><input id="verifymail" name="verifymail" type="email" oninput="checkMail(this)" required/></td>
 		</tr>
 		<tr>
-		<td colspan="2"	><input type="submit" value="Vaihda sähköposti"></td>
+		<td colspan="2" rowspan="2" class="buttoncell"><input type="submit" value="Vaihda sähköposti" class="button"></td>
+		</tr>
 		</table>
 	</form>
 </div>
 <div id="userform" class="bottomform">
 	<form method="post" action="changepass.php">
 		<h4>Salasanan vaihto</h4>
-		<table>
+		<table class="logintable">
 		<tr>
-		<th><label for="oldpass">Nykyinen salasana:</label></th>
+		<td><label for="oldpass">Nykyinen salasana:</label></td>
 		<td><input id="oldpass" name="oldpass" type="password" required/></td>
 		</tr>
 		<tr>
-		<th><label for="newpass">Uusi salasana:</label></th>
+		<td><label for="newpass">Uusi salasana:</label></td>
 		<td><input id="newpass" name="newpass" type="password" required/></td>
 		</tr>
 		<tr>
-		<th><label for="verifypass">Vahvista uusi salasana:</label></th>
+		<td><label for="verifypass">Vahvista uusi salasana:</label></td>
 		<td><input id="verifypass" name="verifypass" type="password" required oninput="check(this)" /></td>
 		</tr>
 		<tr>
-		<td colspan="2"	><input type="submit" id="password_submit" value="Vaihda salasana"></td>
+		<td colspan="2"	class="buttoncell"><input type="submit" id="password_submit" value="Vaihda salasana" class="button"></td>
 		</table>
 	</form>
+</div>
 </div>
 <script>
 //opens my profile
@@ -127,6 +128,7 @@ function openProfile(){
 	$('#profiili').show();
 	$('#infopanel').hide();
 	$('#aanitegalleria').hide();
+	userinfoDrop();
 }
 
     function check(input) {
@@ -183,7 +185,7 @@ for (var i = 0; i < acc.length; i++) {
                 <th>Kategoria</th>
                 <th>Pituus</th>
             </tr>
-        </thead>
+       </thead>
 		<tbody style="text-align: center;">
 <?php 
 
@@ -230,20 +232,17 @@ function openGallery(){
 <div id="media-buttons" class="play" onClick="play()"><span class="fa fa-play" id="icons" aria-hidden="true"></span></div>
 <div id="media-buttons" class="pause" style="display: none;" onClick="pause()"><span id="icons" class="fa fa-pause"></span></div>
 <div id="media-buttons" class="forward" onClick="forward()"><span id="icons" class="fa fa-forward" aria-hidden="true"></span></div>
-<div id="media-buttons" class="openbutton" onclick="openVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true"></span></div>
-<div id="media-buttons" class="closebutton" style="display: none;" onclick="closeVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true" ></span></div>
+<div id="media-buttons" onclick="toggleVolumeSlider()"><span id="icons" class="fa fa-volume-up" aria-hidden="true"></span></div>
 <div id="volume">
 	<div id="slidercontainer">
 		<div id="media-buttons" class="mutebutton" style=" text-align:center;" onclick="muteSound()"><span id="icons"  class="fa fa-volume-up"></span></div>
 		<div id="media-buttons" class="unmutebutton" style="display:none; text-align:center;" onclick="unmuteSound()"><span id="icons"  class="fa fa-volume-off"></span></div>
-		<input id="volumeslider" orient="vertical" oninput="changeVolume(this.value)" type="range" min="0" max="100" value="50"></input>
+		<input id="volumeslider"  oninput="changeVolume(this.value)" type="range" min="0" max="100" value="50"></input>
 	</div>
 </div>
 
 
 <h2 id="songname">Valitse äänite galleriasta</h2>
-<br class="responsivebreak">
-
 <input disabled id="progressbar" oninput="changeTime(this.value)" onchange="changeTime(this.value)" type="range" min="0" max="1000" step="0.1" value="0"/>
 
 <div id="progresstext">
@@ -274,7 +273,7 @@ function pause() {
 }
 
 function updateSource(input, songname) { 
-	var source = "aanitteet/mp3/" + input + ".mp3";
+	var source = "aanitteet/" + input + ".mp3";
 	audioPlayer.src = source;
 	$('#songname').text(songname);
 	audioPlayer.load(); //call this to just preload the audio without playing
@@ -325,19 +324,9 @@ function changeVolume(volume){
 	audioPlayer.volume = volume / 100;
 }
 
-
-function openVolumeSlider(){
-	$("#slidercontainer").show();
-	$('.openbutton').hide();
-	$('.closebutton').show();
+function toggleVolumeSlider(){
+	$("#slidercontainer").toggle("fast");
 }
-
-function closeVolumeSlider(){
-	$("#slidercontainer").hide();
-	$('.openbutton').show();
-	$('.closebutton').hide();
-}
-
 function muteSound(){
 	audioPlayer.muted = true;
 	$('.mutebutton').hide();
@@ -349,8 +338,6 @@ function unmuteSound(){
 	$('.mutebutton').show();
 	$('.unmutebutton').hide();
 }
-            
 </script>
-</div>
 </body>
 </html>
