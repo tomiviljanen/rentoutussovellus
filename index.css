@@ -1,4 +1,4 @@
-li, a, p, h1, h2, h3, h4, label, th, td, span {
+th, td{
 	font-family: 'Raleway', sans-serif;
 }
 
@@ -7,17 +7,18 @@ body{
 	padding: 0;
 	min-width: 320;
 	min-height: 480;
+	font-family: 'Raleway', sans-serif;
 }
 
 #userinfo{
-float: right;
+	float: right;
 }
 
 #icons{
 	font-size: 40px;
 	line-height: 50px;
 	width: 50px;
-    height: 50px;
+	height: 50px;
 }
 #headerdesktop{
 	background-color: #FD6E42;
@@ -29,6 +30,7 @@ float: right;
 	min-height: 50px;
 	min-width: 50px;
 	text-align: center;
+	cursor: pointer;
 }
 
 #menubutton:hover{
@@ -46,7 +48,8 @@ float: right;
 
 #navlist li{
 	display: inline;
-		padding-right: 25px;
+	padding-right: 25px;
+	cursor: pointer;
 }
 
 #username{
@@ -115,10 +118,17 @@ float: right;
 	display: inline-block;
 }
 #volumeslider{
-   -webkit-appearance: slider-vertical;
+   -webkit-appearance: none;
    writing-mode: bt-lr;
-   width: 8px;
-   height: 170px;
+   width: 170px;
+   -webkit-transform:rotate(270deg);
+   -moz-transform:rotate(270deg);
+   -o-transform:rotate(270deg);
+   -ms-transform:rotate(270deg);
+   transform:rotate(270deg); 
+   margin-left: -60px;
+   margin-top: 90px;
+   height: 8px; 
 }
 
 #slidercontainer{
@@ -266,7 +276,7 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]:focus::-webkit-slider-runnable-track {
 	background: #FD6E42;
 }
-#progressbar::-moz-range-track {
+input[type="range"]::-moz-range-track {
 	width: 100%;
 	height: 5px;
 	cursor: pointer;
@@ -275,14 +285,13 @@ input[type="range"]:focus::-webkit-slider-runnable-track {
 	background: #FFF;
 	border-radius: 5px;
 }
-#volumeslider::-moz-range-track {
-	width: 5px;
-	height: 100%;
-	cursor: pointer;
-	animate: 0.2s;
-	box-shadow: 0px 0px 1px #FFFFFF;
-	background: #FFF;
+
+input[type="range"]::-moz-range-progress{
+	background-color: #8AB301;
+	height: 5px;
 	border-radius: 5px;
+	box-shadow: 0px 0px 1px #FFFFFF;
+	animate: 0.2s;
 }
 input[type="range"]::-moz-range-thumb {
 	border: 1px solid #000000;
@@ -292,7 +301,7 @@ input[type="range"]::-moz-range-thumb {
 	background: #FFFFFF;
 	cursor: pointer;
 }
-#progressbar::-ms-track {
+input[type="range"]::-ms-track {
 	width: 100%;
 	height: 5px;
 	cursor: pointer;
@@ -301,15 +310,7 @@ input[type="range"]::-moz-range-thumb {
 	border-color: transparent;
 	color: transparent;
 }
-#volumeslider::-ms-track {
-	width: 5px;
-	height: 100%;
-	cursor: pointer;
-	animate: 0.2s;
-	background: transparent;
-	border-color: transparent;
-	color: transparent;
-}
+
 input[type="range"]::-ms-fill-lower {
 	background: #FFF;
 	border-radius: 10px;
@@ -356,4 +357,45 @@ input[type="range"]:focus::-ms-fill-upper {
 	#imagecover{display:none;}
 	#headerdesktop{display: none;}
 	#drop-userinfo{display: none;}
+}
+
+.button {
+	background-color: #8AB301;
+	border: 2px solid white;
+	border-radius: 3px;
+	color: white;
+	padding: 10px 20px 10px 20px;
+	font-size: 16px;	
+}
+
+.buttoncell {
+	text-align: center;
+}
+
+
+#aanitetable_filter input{
+	font-family: 'Raleway', sans-serif;
+	border: 1px solid black;
+	border-radius: 3px;
+	font-size: 16px;
+	padding: 5px;
+}
+
+.button:hover {
+	/* border: 2px solid #FD6E42; */
+	background-color: #8AB301;
+	color: #FD6E42;
+}
+
+input[type="submit"]{
+	margin-top: 25px;
+}
+
+input[type="text"], input[type="password"], input[type="email"]{
+	font-family: 'Raleway', sans-serif;
+	border: 1px solid black;
+	border-radius: 3px;
+	font-size: 16px;
+	padding: 5px;
+	
 }
